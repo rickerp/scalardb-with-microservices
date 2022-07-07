@@ -1,0 +1,43 @@
+{
+	"customer.customer": {
+		"transaction": true,
+		"partition-key": ["customer_id"],
+		"columns": {
+			"customer_id": "INT",
+			"name": "TEXT",
+			"treasury": "FLOAT"
+		}	
+	},
+	"customer.supermarket": {
+		"transaction": true
+	},
+	"customer.supplier": {
+		"transaction": true
+	},
+	"product.product": {
+		"transaction": true,
+		"partition-key": ["customer_id"],
+		"clustering-key": ["product_id"],
+		"columns": {
+			"product_id": "INT",
+			"customer_id": "INT",
+			"name": "TEXT",
+			"count": "INT",
+			"price": "FLOAT"
+		}
+	},
+	"product.order": {
+		"transaction": true,
+		"partition-key": ["from_id", "to_id"],
+		"clustering-key": ["product_id"],
+		"secondary-index": ["order_id"],
+		"columns": {
+			"order_id": "INT",
+			"from_id": "INT",
+			"to_id": "INT",
+			"product_id": "INT",
+			"count": "INT",
+			"timestamp": "BIGINT"
+		}
+	}
+}
