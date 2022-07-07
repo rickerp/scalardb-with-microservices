@@ -1,0 +1,17 @@
+apply plugin: 'java'
+apply plugin: 'idea'
+apply plugin: 'application'
+
+repositories {
+    mavenCentral()
+}
+
+mainClassName = "test.helloWord"
+
+dependencies {
+    implementation fileTree(dir: '../../core/build/install/core', include: '*.jar')
+    implementation fileTree(dir: '../../core/build/install/core/lib', include: '*.jar')
+}
+
+sourceCompatibility = 1.8 
+targetCompatibility = 1.8 
