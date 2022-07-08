@@ -1,0 +1,37 @@
+{
+  "order-service.orders": {
+    "transaction": true,
+    "partition-key": [
+      "from_id",
+      "to_id"
+    ],
+    "clustering-key": [
+      "timestamp"
+    ],
+    "secondary-index": [
+      "id"
+    ],
+    "columns": {
+      "id": "TEXT",
+      "to_id": "INT",
+      "from_id": "INT",
+      "product_id": "INT",
+      "count": "INT",
+      "timestamp": "BIGINT"
+    }
+  },
+  "order-service.product": {
+    "transaction": true,
+    "partition-key": [
+      "id"
+    ],
+    "clustering-key": [],
+    "columns": {
+      "id": "INT",
+      "name": "TEXT",
+      "count": "INT",
+      "price": "INT",
+      "owned_by": "INT"
+    }
+  }
+}
