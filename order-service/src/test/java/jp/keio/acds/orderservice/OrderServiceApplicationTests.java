@@ -1,13 +1,13 @@
-package jp.keio.acds.microscalar;
+package jp.keio.acds.orderservice;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class MicroscalarApplicationTests {
+class OrderServiceApplicationTests {
 
-    @Test
-    void contextLoads() {
-    }
+	@Test
+	void contextLoads() {
+	}
 
 }
