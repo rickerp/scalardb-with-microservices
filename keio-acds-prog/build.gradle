@@ -1,17 +1,26 @@
-apply plugin: 'java'
-apply plugin: 'idea'
-apply plugin: 'application'
+plugins {
+    id 'java'
+    id 'application'
+}
+
+group 'org.sample'
+version '1.0-SNAPSHOT'
 
 repositories {
     mavenCentral()
 }
 
-mainClassName = "test.helloWord"
-
 dependencies {
-    implementation fileTree(dir: '../../core/build/install/core', include: '*.jar')
-    implementation fileTree(dir: '../../core/build/install/core/lib', include: '*.jar')
+    implementation 'com.scalar-labs:scalardb:3.5.2'
+    implementation 'info.picocli:picocli:4.1.4'
+    implementation 'org.slf4j:slf4j-nop:1.7.25'
 }
 
-sourceCompatibility = 1.8 
-targetCompatibility = 1.8 
+application {
+    mainClassName = 'sample.command.sampleCommand'
+}
+
+archivesBaseName = "sample"
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
