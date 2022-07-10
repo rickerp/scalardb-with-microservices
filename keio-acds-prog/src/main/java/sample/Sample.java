@@ -26,18 +26,16 @@ public class Sample implements AutoCloseable {
 		System.out.println("Create a transaction manager object");
 		TransactionFactory factory =
 	        new TransactionFactory(new DatabaseConfig(new File("database.properties")));
-		System.out.println(factory); 
-		System.out.println("^ factory");
 	    manager = factory.getTransactionManager();  //errors
 	    System.out.println("End to create a transaction manager object");
 	}
 	
 	public void loadInitialData() throws TransactionException {
-		System.out.println("Enter in loadInitialData");
+		System.out.println("Enter in loadInitialData()");
 		DistributedTransaction transaction = null;
 	    try {
 	      transaction = manager.start();
-	      System.out.println("start transaction");
+	      System.out.println("Start transaction:");
 	      loadCustomerIfNotExists(transaction, 1, "Life", (float) 10000.0, 1); //supermarket
 	      loadCustomerIfNotExists(transaction, 2, "VegetableExpress",(float) 5000.0, 2); //supplier
 	      loadCustomerIfNotExists(transaction, 3, "DinkService",(float) 5000.0, 2); //supplier
@@ -56,13 +54,12 @@ public class Sample implements AutoCloseable {
 	      loadProductIfNotExists(transaction, 1, 1, 5, 250);
 	      loadOrderIfNotExists(transaction, 1, 1, 2, 1, 5);
 	      
-	      System.out.println("finish transaction");
+	      System.out.println("Finish transaction");
 	      transaction.commit();
-	      System.out.println("commit transaction");
+	      System.out.println("Commit transaction");
 	    } catch (TransactionException e) {
 	      if (transaction != null) {
-		    System.out.println("abort transaction");
-		    System.out.println(transaction);
+		    System.out.println("Abort transaction");
 	        // If an error occurs, abort the transaction
 	        transaction.abort();
 	      }
@@ -111,45 +108,183 @@ public class Sample implements AutoCloseable {
 	private void loadOrderIfNotExists(DistributedTransaction transaction, int orderId, int itemId, int from, int to, int count)
 		throws TransactionException {
 		System.out.println("loadOrderIfNotExists");
-			   Optional<Result> order =
-			      transaction.get(
-			         new Get(new Key("order_id", orderId))
-			         	  .forNamespace("orders")
-			         	  .forTable("orders"));
-			   System.out.println("test if order exist");
-			   if (!order.isPresent()) {
-				  System.out.println("start trasaction orders");
-			      transaction.put(
-			         new Put(new Key("order_id", orderId))
-			         	  .withValue("item_id", itemId)
-			              .withValue("from_id", from)
-			              .withValue("to_id", to)
-			              .withValue("count", count)
-			              .withValue("timestamp", System.currentTimeMillis())
-			              .forNamespace("orders")
-			              .forTable("orders"));
-			    }
+			Optional<Result> order =
+		      transaction.get(
+		         new Get(new Key("order_id", orderId))
+		         	  .forNamespace("orders")
+		         	  .forTable("orders"));
+		   if (!order.isPresent()) {
+		      transaction.put(
+		         new Put(new Key("order_id", orderId))
+		         	  .withValue("item_id", itemId)
+		         	  .withValue("from_id", from)
+			          .withValue("to_id", to)
+			          .withValue("count", count)
+			          .withValue("timestamp", System.currentTimeMillis())
+			          .forNamespace("orders")
+			          .forTable("orders"));
+		   }
 	}
 	
 	private void loadItemIfNotExists(DistributedTransaction transaction, int itemId, String name)
 		throws TransactionException {
 		System.out.println("loadItemIfNotExists");
-			   Optional<Result> item =
-			      transaction.get(
-			         new Get(new Key("item_id", itemId))
-			         	  .forNamespace("orders")
-			         	  .forTable("item"));
-			   if (!item.isPresent()) {
-			      transaction.put(
-			         new Put(new Key("item_id", itemId))
-			              .withValue("name", name)
-			              .forNamespace("orders")
-			              .forTable("item"));
-			    }
+			Optional<Result> item =
+			  transaction.get(
+				new Get(new Key("item_id", itemId))
+			      	  .forNamespace("orders")
+			          .forTable("item"));
+			if (!item.isPresent()) {
+		      transaction.put(
+			    new Put(new Key("item_id", itemId))
+			          .withValue("name", name)
+		              .forNamespace("orders")
+		              .forTable("item"));
+			}
+	}
+	
+	public void getCustomersInfo() throws TransactionException {
+		DistributedTransaction transaction = null;
+		System.out.println("Enter in getCustomerInfo()");
+		try {
+			System.out.println("Strat transaction manager");
+			transaction = manager.start();
+			
+			
+		} catch (Exception e) {
+			if (transaction != null) {
+				// If an error occurs, abort the transaction
+			    transaction.abort();
+			}
+			throw e;
+		}
+	}
+	
+	public void getOrdersInfo() throws TransactionException {
+		
+		DistributedTransaction transaction = null;
+		System.out.println("Enter in getOrderInfo()");
+		
+		try {
+			System.out.println("Strat transaction manager");
+			transaction = manager.start();
+			//get all info in table orders
+			
+			for(int orderId=1; orderId<=100; orderId++) {
+				Optional<Result> order =
+						transaction.get( 
+					         new Get(new Key("order_id", orderId))
+					                  .forNamespace("orders")
+					                  .forTable("orders"));
+				
+				//int orderId = order.getValue("order_id").get().getAsInt();
+				if (order.isPresent()) {
+					String orderInfo = getOrderById(transaction, orderId);
+					System.out.println("Order Info:"+orderInfo);
+				} else {
+					break;
+				}
+			}
+			
+			//get all info in table item
+			
+			for(int itemId=1; itemId<=100; itemId++) {
+				Optional<Result> item =
+						transaction.get( 
+					         new Get(new Key("item_id", itemId))
+					                  .forNamespace("orders")
+					                  .forTable("item"));
+					
+					
+				//int itemId = item.getValue("item_id").get().getAsInt();
+				if(item.isPresent()) {
+					String itemInfo = getItemById(transaction, itemId);
+					System.out.println("Item Info:"+itemInfo);
+				} else {
+					break;
+				}
+			}
+			
+		} catch (Exception e) {
+			if (transaction != null) {
+				// If an error occurs, abort the transaction
+			    transaction.abort();
+			}
+			throw e;
+		}
+	}
+	
+	private String getItemById(DistributedTransaction transaction, int itemId) throws TransactionException {
+		System.out.println("getItemById");
+	    try {
+	      // Retrieve the customer info for the specified customer ID from the customers table
+	      Optional<Result> item =
+	          transaction.get(
+	              new Get(new Key("item_id", itemId))
+	                  .forNamespace("orders")
+	                  .forTable("item"));
+
+	      if (!item.isPresent()) {
+	        // If the customer info the specified customer ID doesn't exist, throw an exception
+	        throw new RuntimeException("Item not found");
+	      }
+
+	      // Commit the transaction (even when the transaction is read-only, we need to commit)
+	      transaction.commit();
+
+	      // Return the customer info as a JSON format
+	      return String.format(
+	          "{\"id\": %d, \"name\": \"%s\"}",
+	          itemId,
+	          item.get().getValue("name").get().getAsString().get());
+	    } catch (Exception e) {
+	      if (transaction != null) {
+	        // If an error occurs, abort the transaction
+	        transaction.abort();
+	      }
+	      throw e;
+	    }
+	}
+	
+	private String getOrderById(DistributedTransaction transaction, int orderId) throws TransactionException {
+		System.out.println("getOrderById");
+	    try {
+	      // Retrieve the customer info for the specified customer ID from the customers table
+	      Optional<Result> order =
+	          transaction.get(
+	              new Get(new Key("order_id", orderId))
+	                  .forNamespace("orders")
+	                  .forTable("orders"));
+
+	      if (!order.isPresent()) {
+	        // If the customer info the specified customer ID doesn't exist, throw an exception
+	        throw new RuntimeException("Order not found");
+	      }
+
+	      // Commit the transaction (even when the transaction is read-only, we need to commit)
+	      transaction.commit();
+
+	      // Return the customer info as a JSON format
+	      return String.format(
+	          "{\"id\": %d, \"item_id\": \"%d, \"from\": \"%d, \"to\": \"%d\", \"count\": \"%d, \"timestamp\": \"%d}",
+	          orderId,
+	          order.get().getValue("item_id").get().getAsInt(),
+	          order.get().getValue("from_id").get().getAsInt(),
+	          order.get().getValue("to_id").get().getAsInt(),
+	          order.get().getValue("count").get().getAsInt(),
+	          order.get().getValue("timestamp").get().getAsLong());
+	    } catch (Exception e) {
+	      if (transaction != null) {
+	        // If an error occurs, abort the transaction
+	        transaction.abort();
+	      }
+	      throw e;
+	    }
 	}
 	
 	 @Override
 	 public void close() {
-	    manager.close();
+		 System.out.println("Close !");
+		 manager.close();
 	 }
 }

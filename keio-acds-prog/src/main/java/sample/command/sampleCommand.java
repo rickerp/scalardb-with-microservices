@@ -8,7 +8,8 @@ import picocli.CommandLine.Option;
     name = "bin/sample",
     description = "ADB project version 0.1",
     subcommands = {
-      LoadInitialDataCommand.class
+      LoadInitialDataCommand.class,
+      GetOrdersInfoCommand.class
     })
      
 public class sampleCommand {
@@ -23,6 +24,7 @@ public class sampleCommand {
 	//@Override
 	public void run() {
 		if (showHelp) {
+			System.out.println("Show help");
 			CommandLine.usage(this, System.out);
 		}
 	}
