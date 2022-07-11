@@ -282,6 +282,110 @@ public class Sample implements AutoCloseable {
 	    }
 	}
 	
+	private String getCustomersById(DistributedTransaction transaction, int customerId) throws TransactionException {
+		System.out.println("getCustomerById");
+	    try {
+	      // Retrieve the customer info for the specified customer ID from the customers table
+	      Optional<Result> customer =
+	          transaction.get(
+	              new Get(new Key("customer_id", customerId))
+	                  .forNamespace("customer")
+	                  .forTable("customers"));
+
+	      if (!customer.isPresent()) {
+	        // If the customer info the specified customer ID doesn't exist, throw an exception
+	        throw new RuntimeException("Customer not found");
+	      }
+
+	      // Commit the transaction (even when the transaction is read-only, we need to commit)
+	      transaction.commit();
+
+	      // Return the customer info as a JSON format
+	      return String.format(
+	          "{\"id\": %d, \"name\": \"%s, \"treasury\": \"%f, \"type\": \"%d\"}",
+	          customerId,
+	          customer.get().getValue("name").get().getAsString().get(),
+	          customer.get().getValue("treasury").get().getAsFloat(),
+	          customer.get().getValue("to_id").get().getAsInt());
+	    } catch (Exception e) {
+	      if (transaction != null) {
+	        // If an error occurs, abort the transaction
+	        transaction.abort();
+	      }
+	      throw e;
+	    }
+	}
+	
+	private void getProductByCustomerId(DistributedTransaction transaction, int customerId) throws TransactionException {
+		System.out.println("getProductByCustomerId");
+	    try {
+	      // Retrieve the customer info for the specified customer ID from the customers table
+	      List<Result> products =
+	          transaction.scan(
+	              new Scan(new Key("customer_id", customerId))
+	                  .forNamespace("customer")
+	                  .forTable("product"));
+	     
+	      // Commit the transaction (even when the transaction is read-only, we need to commit)
+	      transaction.commit();
+	      
+	      for(Result product: products) {
+
+	    	  // Return the customer info as a JSON format
+		      String productInfo = String.format(
+		          "{\"item_id\": %d, \"customer_id\": \"%d, \"count\": \"%d, \"price\": \"%f\"}",
+		          product.getValue("item_id").get().getAsInt(),
+		          customerId,
+		          product.getValue("count").get().getAsInt(),
+		          product.getValue("price").get().getAsFloat());
+		      System.out.println(productInfo);
+	      }
+	     
+	      
+	    } catch (Exception e) {
+	      if (transaction != null) {
+	        // If an error occurs, abort the transaction
+	        transaction.abort();
+	      }
+	      throw e;
+	    }
+	}
+	
+	private void getProductByItemId(DistributedTransaction transaction, int itemId) throws TransactionException {
+		System.out.println("getProductByItemId");
+	    try {
+	      // Retrieve the customer info for the specified customer ID from the customers table
+	      List<Result> products =
+	          transaction.scan(
+	              new Scan(new Key("item_id", itemId))
+	                  .forNamespace("customer")
+	                  .forTable("product"));
+	     
+	      // Commit the transaction (even when the transaction is read-only, we need to commit)
+	      transaction.commit();
+	      
+	      for(Result product: products) {
+
+	    	  // Return the customer info as a JSON format
+		      String productInfo = String.format(
+		          "{\"item_id\": %d, \"customer_id\": \"%d, \"count\": \"%d, \"price\": \"%f\"}",
+		          itemId,
+		          product.getValue("customer_id").get().getAsInt(),
+		          product.getValue("count").get().getAsInt(),
+		          product.getValue("price").get().getAsFloat());
+		      System.out.println(productInfo);
+	      }
+	     
+	      
+	    } catch (Exception e) {
+	      if (transaction != null) {
+	        // If an error occurs, abort the transaction
+	        transaction.abort();
+	      }
+	      throw e;
+	    }
+	}
+	
 	 @Override
 	 public void close() {
 		 System.out.println("Close !");
