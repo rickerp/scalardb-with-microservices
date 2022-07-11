@@ -143,23 +143,6 @@ public class Sample implements AutoCloseable {
 			}
 	}
 	
-	public void getCustomersInfo() throws TransactionException {
-		DistributedTransaction transaction = null;
-		System.out.println("Enter in getCustomerInfo()");
-		try {
-			System.out.println("Strat transaction manager");
-			transaction = manager.start();
-			
-			
-		} catch (Exception e) {
-			if (transaction != null) {
-				// If an error occurs, abort the transaction
-			    transaction.abort();
-			}
-			throw e;
-		}
-	}
-	
 	public void getOrdersInfo() throws TransactionException {
 		
 		DistributedTransaction transaction = null;
@@ -168,8 +151,9 @@ public class Sample implements AutoCloseable {
 		try {
 			System.out.println("Strat transaction manager");
 			transaction = manager.start();
-			//get all info in table orders
 			
+			//get all info in table orders
+			System.out.println("Display the table orders.orders: ");
 			for(int orderId=1; orderId<=100; orderId++) {
 				Optional<Result> order =
 						transaction.get( 
@@ -180,14 +164,14 @@ public class Sample implements AutoCloseable {
 				//int orderId = order.getValue("order_id").get().getAsInt();
 				if (order.isPresent()) {
 					String orderInfo = getOrderById(transaction, orderId);
-					System.out.println("Order Info:"+orderInfo);
+					System.out.println(orderInfo);
 				} else {
 					break;
 				}
 			}
 			
 			//get all info in table item
-			
+			System.out.println("Display the table orders.item: ");
 			for(int itemId=1; itemId<=100; itemId++) {
 				Optional<Result> item =
 						transaction.get( 
@@ -199,7 +183,7 @@ public class Sample implements AutoCloseable {
 				//int itemId = item.getValue("item_id").get().getAsInt();
 				if(item.isPresent()) {
 					String itemInfo = getItemById(transaction, itemId);
-					System.out.println("Item Info:"+itemInfo);
+					System.out.println(itemInfo);
 				} else {
 					break;
 				}
@@ -215,7 +199,7 @@ public class Sample implements AutoCloseable {
 	}
 	
 	private String getItemById(DistributedTransaction transaction, int itemId) throws TransactionException {
-		System.out.println("getItemById");
+		//System.out.println("getItemById");
 	    try {
 	      // Retrieve the customer info for the specified customer ID from the customers table
 	      Optional<Result> item =
@@ -226,7 +210,7 @@ public class Sample implements AutoCloseable {
 
 	      if (!item.isPresent()) {
 	        // If the customer info the specified customer ID doesn't exist, throw an exception
-	        throw new RuntimeException("Item not found");
+	        throw new RuntimeException("Item not found: "+itemId);
 	      }
 
 	      // Commit the transaction (even when the transaction is read-only, we need to commit)
@@ -247,7 +231,7 @@ public class Sample implements AutoCloseable {
 	}
 	
 	private String getOrderById(DistributedTransaction transaction, int orderId) throws TransactionException {
-		System.out.println("getOrderById");
+		//System.out.println("getOrderById");
 	    try {
 	      // Retrieve the customer info for the specified customer ID from the customers table
 	      Optional<Result> order =
@@ -258,7 +242,7 @@ public class Sample implements AutoCloseable {
 
 	      if (!order.isPresent()) {
 	        // If the customer info the specified customer ID doesn't exist, throw an exception
-	        throw new RuntimeException("Order not found");
+	        throw new RuntimeException("Order not found: "+orderId);
 	      }
 
 	      // Commit the transaction (even when the transaction is read-only, we need to commit)
@@ -282,8 +266,45 @@ public class Sample implements AutoCloseable {
 	    }
 	}
 	
+	public void getCustomersInfo() throws TransactionException {
+		DistributedTransaction transaction = null;
+		System.out.println("Enter in getCustomerInfo()");
+		//Display the database customers
+		System.out.println("Display all customers (customer.customers) with their product (customer.product)");
+		try {
+			System.out.println("Strat transaction manager");
+			transaction = manager.start();
+			
+			for(int customerId=1; customerId<=100; customerId++) {
+				Optional<Result> customer =
+						transaction.get( 
+					         new Get(new Key("customer_id", customerId))
+					                  .forNamespace("customer")
+					                  .forTable("customers"));
+				
+				//int orderId = order.getValue("order_id").get().getAsInt();
+				if (customer.isPresent()) {
+					String customerInfo = getCustomersById(transaction, customerId);
+					System.out.println("Customer: "+customerInfo);
+					System.out.println("...link to: ");
+					getProductByCustomerId(transaction, customerId);
+				} else {
+					break;
+				}
+			}
+			
+			
+		} catch (Exception e) {
+			if (transaction != null) {
+				// If an error occurs, abort the transaction
+			    transaction.abort();
+			}
+			throw e;
+		}
+	}
+	
 	private String getCustomersById(DistributedTransaction transaction, int customerId) throws TransactionException {
-		System.out.println("getCustomerById");
+		//System.out.println("getCustomerById");
 	    try {
 	      // Retrieve the customer info for the specified customer ID from the customers table
 	      Optional<Result> customer =
@@ -306,7 +327,7 @@ public class Sample implements AutoCloseable {
 	          customerId,
 	          customer.get().getValue("name").get().getAsString().get(),
 	          customer.get().getValue("treasury").get().getAsFloat(),
-	          customer.get().getValue("to_id").get().getAsInt());
+	          customer.get().getValue("type").get().getAsInt());
 	    } catch (Exception e) {
 	      if (transaction != null) {
 	        // If an error occurs, abort the transaction
@@ -316,32 +337,59 @@ public class Sample implements AutoCloseable {
 	    }
 	}
 	
+	private int getNumberItems(DistributedTransaction transaction) throws TransactionException {
+		int id = 1;
+		boolean end =  false;
+		while(!end) {
+			Optional<Result> item =
+					transaction.get( 
+				         new Get(new Key("item_id", id))
+				                  .forNamespace("orders")
+				                  .forTable("item"));
+			
+			// Commit the transaction (even when the transaction is read-only, we need to commit)
+		    transaction.commit();
+		      
+			if(item.isPresent())
+				id++;
+			else
+				break;
+		}
+		
+		return id-1;
+	}
+	
 	private void getProductByCustomerId(DistributedTransaction transaction, int customerId) throws TransactionException {
-		System.out.println("getProductByCustomerId");
+		//System.out.println("getProductByCustomerId");
 	    try {
-	      // Retrieve the customer info for the specified customer ID from the customers table
-	      List<Result> products =
-	          transaction.scan(
-	              new Scan(new Key("customer_id", customerId))
-	                  .forNamespace("customer")
-	                  .forTable("product"));
-	     
-	      // Commit the transaction (even when the transaction is read-only, we need to commit)
-	      transaction.commit();
+	    	
+	      int numberItems = getNumberItems(transaction);
+	      //System.out.println("get numberItems: "+numberItems);
 	      
-	      for(Result product: products) {
-
-	    	  // Return the customer info as a JSON format
-		      String productInfo = String.format(
-		          "{\"item_id\": %d, \"customer_id\": \"%d, \"count\": \"%d, \"price\": \"%f\"}",
-		          product.getValue("item_id").get().getAsInt(),
-		          customerId,
-		          product.getValue("count").get().getAsInt(),
-		          product.getValue("price").get().getAsFloat());
-		      System.out.println(productInfo);
+	      for (int itemId=1; itemId<=numberItems; itemId++) {
+	    	// Retrieve the customer info for the specified customer ID from the customers table
+		      Optional<Result> product =
+		          transaction.get(
+		              new Get(new Key("item_id", itemId), new Key("customer_id", customerId))
+		                  .forNamespace("customer")
+		                  .forTable("product"));
+		     
+		      // Commit the transaction (even when the transaction is read-only, we need to commit)
+		      transaction.commit();
+		      
+		      if(product.isPresent()) {
+		      // Return the customer info as a JSON format
+				  String productInfo = String.format(
+				      "{\"item_id\": %d, \"customer_id\": \"%d, \"count\": \"%d, \"price\": \"%f\"}",
+				       product.get().getValue("item_id").get().getAsInt(),
+				       customerId,
+				       product.get().getValue("count").get().getAsInt(),
+				       product.get().getValue("price").get().getAsFloat());
+				  System.out.println(productInfo);
+		      }
+		   
 	      }
-	     
-	      
+	        
 	    } catch (Exception e) {
 	      if (transaction != null) {
 	        // If an error occurs, abort the transaction

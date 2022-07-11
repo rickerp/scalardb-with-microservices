@@ -9,7 +9,8 @@ import picocli.CommandLine.Option;
     description = "ADB project version 0.1",
     subcommands = {
       LoadInitialDataCommand.class,
-      GetOrdersInfoCommand.class
+      GetOrdersInfoCommand.class,
+      GetCustomersInfoCommand.class
     })
      
 public class sampleCommand {
