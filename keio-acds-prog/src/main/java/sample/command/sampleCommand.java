@@ -10,7 +10,8 @@ import picocli.CommandLine.Option;
     subcommands = {
       LoadInitialDataCommand.class,
       GetOrdersInfoCommand.class,
-      GetCustomersInfoCommand.class
+      GetCustomersInfoCommand.class,
+      PlaceOrderCommand.class
     })
      
 public class sampleCommand {

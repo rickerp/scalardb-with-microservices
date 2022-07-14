@@ -434,6 +434,173 @@ public class Sample implements AutoCloseable {
 	    }
 	}
 	
+	
+	/*	Place order
+	  */
+
+	public void placeOrder(int customerId, int itemId, int itemCount, int fromId)throws TransactionException {
+		System.out.println("placeOrder");
+	    DistributedTransaction transaction = null;
+	    try {     
+	      // Start a transaction
+	      int count;
+	      float price;
+	      transaction = manager.start();
+	      
+	       // get last order id + 1
+	      int orderId=1;
+	      int vrai = 0;
+	      do{
+	      Optional<Result> order =
+				transaction.get( 
+				new Get(new Key("order_id", orderId))
+					.forNamespace("orders")
+					.forTable("orders"));
+				if (order.isPresent()){
+					vrai = 0;
+					orderId = orderId + 1;
+				}else{
+					vrai = 1;
+				}
+		  }while ( vrai == 0);
+		  System.out.println("set up the order id");
+
+	      // Obtain product
+	      //fair un get avec l'Itemid & fromid
+	      Optional<Result> product_supplier =
+				transaction.get( 
+					new Get(new Key("item_id", itemId), new Key("customer_id", fromId))
+						.forNamespace("customer")
+						.forTable("product"));
+				
+		  count = product_supplier.get().getValue("count").get().getAsInt();
+		  price = product_supplier.get().getValue("price").get().getAsFloat();
+
+		  // verif count
+		  if (itemCount <= count){
+			  System.out.println("check the asked count");
+		  
+			  // Obtain customer
+			  Optional<Result> customer =
+				transaction.get(
+	              	new Get(new Key("customer_id", customerId))
+	                  	.forNamespace("customer")
+	                  	.forTable("customers"));
+	         float treasury = customer.get().getValue("treasury").get().getAsFloat();
+	         //System.out.println(treasury);	
+	                  				
+	         // verif enough money
+	         if (itemCount * price <= treasury){
+	        	 System.out.println("check the customer treasury");
+	             System.out.println("the final amount of the transaction is: "+itemCount * price);
+	             //orderId = orderId+1;
+	                  		
+	             // maj bdd ******************
+	                  					
+	             // NEW order
+	             //COM
+	             transaction.put(
+	            	new Put(new Key("order_id", orderId))
+						.withValue("item_id", itemId)
+						.withValue("from_id", fromId)
+						.withValue("to_id", customerId)
+						.withValue("count", itemCount)
+						.withValue("timestamp", System.currentTimeMillis())
+						.forNamespace("orders")
+						.forTable("orders"));
+							
+				System.out.println("upadte the orders.orders table");
+				// REMOVE from supplier Product : 2 cases
+				// if (itemCount < count) and if (itemCount == count)
+				//COM
+				transaction.put(
+					new Put(new Key("item_id", itemId), 
+							new Key("customer_id", fromId))
+								.withValue("count", count - itemCount)
+								.withValue("price", price)
+								.forNamespace("customer")
+								.forTable("product"));
+				System.out.println("upadte the customer.product table with the supplier informations");
+
+				// ADD to supermarket Product : 2 cases
+				//verif if buyer already have some of these item to add in table product in the same line, else add a new line in product
+				//COM
+				//get avec curtomerid & itemid et faire un isPresent()
+				Optional<Result> product_customer = transaction.get( 
+					new Get(new Key("item_id", itemId), 
+							new Key("customer_id", customerId))
+							.forNamespace("customer")
+							.forTable("product"));
+									
+				// exist=0 --> not in product
+				//if not already present
+				if (!product_customer.isPresent()){
+					transaction.put(
+						new Put(new Key("item_id", itemId), 
+								new Key("customer_id", customerId))
+								.withValue("count", itemCount)
+								.withValue("price", price+50)
+								.forNamespace("customer")
+								.forTable("product"));
+									//si deja présent
+				} else{ // already in product
+				// get count then MAJ
+				// count in tocount
+				// MAJ
+				float price_customer= product_customer.get().getValue("price").get().getAsFloat();
+				int tocount = product_customer.get().getValue("count").get().getAsInt();
+				transaction.put(								
+					new Put(new Key("item_id", itemId), 
+							new Key("customer_id", customerId))
+							.withValue("count", itemCount + tocount )
+							.withValue("price", price_customer)
+							.forNamespace("customer")
+							.forTable("product"));		
+				}
+				System.out.println("upadte the customer.product table with the supermarket informations");
+												
+				// MAJ of treasury
+				// for buyer
+				//COM
+				transaction.put(
+					new Put(new Key("customer_id", customerId))
+							.withValue("treasury", treasury - itemCount * price)
+							.forNamespace("customer")
+							.forTable("customers"));
+										
+				// for seller 
+				//COM
+				Optional<Result> customer2 =
+	          		transaction.get(
+	              		new Get(new Key("customer_id", fromId))
+	              				.forNamespace("customer")
+	              				.forTable("customers"));
+				float treasury2 = customer2.get().getValue("treasury").get().getAsFloat();
+	            //System.out.println(treasury2);
+				transaction.put(
+					new Put(new Key("customer_id", fromId))
+							.withValue("treasury", treasury2 + itemCount * price)
+							.forNamespace("customer")
+							.forTable("customers"));
+								
+				System.out.println("upadte the treasury information");	
+	         } else {
+	    	    System.out.println("not enough money in the supermarket treasury !");
+	         }    				
+		 } else {
+			 System.out.println("not enough product in the supplier stock !");
+		 }
+					
+	    transaction.commit();
+	    } catch (Exception e) {
+	    	if (transaction != null) {
+	        	// If an error occurs, abort the transaction
+	        	transaction.abort();
+	      	}
+	    }
+}
+	
+	
 	 @Override
 	 public void close() {
 		 System.out.println("Close !");
