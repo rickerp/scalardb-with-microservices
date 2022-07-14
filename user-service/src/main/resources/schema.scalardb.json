@@ -1,0 +1,31 @@
+{
+  "user-service.user": {
+    "transaction": true,
+    "partition-key": ["id"],
+    "clustering-key": [],
+    "columns": {
+      "id": "TEXT",
+      "name": "TEXT",
+      "created_at": "BIGINT",
+      "updated_at": "BIGINT"
+    }
+  },
+  "user-service.store": {
+    "transaction": true,
+    "partition-key": ["id"],
+    "clustering-key": [],
+    "columns": {
+      "id": "TEXT",
+      "store_type": "INT"
+    }
+  },
+  "user-service.supplier": {
+    "transaction": true,
+    "partition-key": ["id"],
+    "clustering-key": [],
+    "columns": {
+      "id": "TEXT",
+      "product_type": "INT"
+    }
+  }
+}

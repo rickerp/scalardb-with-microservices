@@ -1,0 +1,92 @@
+openapi: 3.0.1
+info:
+  title: User Service
+  termsOfService: http://swagger.io/terms/
+  version: 0.0.1
+tags:
+- name: user
+  description: User model
+- name: store
+  description: Store model
+- name: supplier
+  description: Supplier model
+paths:
+  /stores:
+    get:
+      tags:
+      - store
+      summary: List stores
+      description: Returns a list of stores
+      operationId: listStores
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Store'
+    post:
+      tags:
+      - store
+      summary: Create a new store
+      operationId: createStore
+      requestBody:
+        description: Store fields
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StoreCreate'
+        required: true
+      responses:
+        405:
+          description: Invalid input
+          content: {}
+      x-codegen-request-body-name: body
+      
+  /stores/{storeId}:
+    get:
+      tags:
+      - store
+      summary: Get store by id
+      description: Gets a single store by id
+      operationId: getStore
+      parameters:
+      - name: storeId
+        in: path
+        description: ID of store to return
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Store'
+  
+components:
+  schemas:
+    StoreCreate:
+      required:
+      - name
+      type: object
+      properties:
+        name:
+          type: string
+          example: Miguels Conbini
+    Store:
+      required:
+      - id
+      - name
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+          example: Miguels Conbini

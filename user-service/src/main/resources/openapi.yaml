@@ -1,0 +1,115 @@
+openapi: 3.0.1
+info:
+  termsOfService: http://swagger.io/terms/
+  title: User Service
+  version: 0.0.1
+servers:
+- url: /
+tags:
+- description: User model
+  name: user
+- description: Store model
+  name: store
+- description: Supplier model
+  name: supplier
+paths:
+  /stores:
+    get:
+      description: Returns a list of stores
+      operationId: listStores
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Store'
+                type: array
+          description: successful operation
+      summary: List stores
+      tags:
+      - store
+      x-accepts: application/json
+      x-tags:
+      - tag: store
+    post:
+      operationId: createStore
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StoreCreate'
+        description: Store fields
+        required: true
+      responses:
+        "405":
+          content: {}
+          description: Invalid input
+      summary: Create a new store
+      tags:
+      - store
+      x-codegen-request-body-name: body
+      x-content-type: application/json
+      x-accepts: application/json
+      x-tags:
+      - tag: store
+  /stores/{storeId}:
+    get:
+      description: Gets a single store by id
+      operationId: getStore
+      parameters:
+      - description: ID of store to return
+        explode: false
+        in: path
+        name: storeId
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Store'
+          description: successful operation
+      summary: Get store by id
+      tags:
+      - store
+      x-accepts: application/json
+      x-tags:
+      - tag: store
+components:
+  schemas:
+    StoreCreate:
+      example:
+        name: Miguels Conbini
+      properties:
+        name:
+          example: Miguels Conbini
+          type: string
+      required:
+      - name
+      type: object
+    Store:
+      example:
+        name: Miguels Conbini
+        id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+      properties:
+        id:
+          format: uuid
+          type: string
+        name:
+          example: Miguels Conbini
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+      required:
+      - id
+      - name
+      type: object
