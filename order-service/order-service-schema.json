@@ -1,23 +1,31 @@
 {
-  "order-service.orders": {
+  "order-service.order": {
     "transaction": true,
     "partition-key": [
-      "from_id",
-      "to_id"
+      "id"
     ],
     "clustering-key": [
       "timestamp"
     ],
-    "secondary-index": [
-      "id"
-    ],
     "columns": {
       "id": "TEXT",
-      "to_id": "INT",
-      "from_id": "INT",
-      "product_id": "INT",
-      "count": "INT",
+      "from_id": "TEXT",
+      "to_id": "TEXT",
       "timestamp": "BIGINT"
+    }
+  },
+  "order-service.order_product": {
+    "transaction": true,
+    "partition-key": [
+      "order_id"
+    ],
+    "clustering-key": [
+      "product_id"
+    ],
+    "columns": {
+      "order_id": "TEXT",
+      "product_id": "TEXT",
+      "count": "INT"
     }
   },
   "order-service.product": {
@@ -27,11 +35,9 @@
     ],
     "clustering-key": [],
     "columns": {
-      "id": "INT",
+      "id": "TEXT",
       "name": "TEXT",
-      "count": "INT",
-      "price": "INT",
-      "owned_by": "INT"
+      "price": "INT"
     }
   }
 }
