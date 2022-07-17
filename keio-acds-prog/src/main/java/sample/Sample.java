@@ -598,8 +598,145 @@ public class Sample implements AutoCloseable {
 	        	transaction.abort();
 	      	}
 	    }
-}
+	}
 	
+		/* 
+		RESTOCK
+		 */
+	public String reStock(int customerId, int reItemid, int reCount, float rePrice)
+	  throws TransactionException {
+		System.out.println("reStock");
+		System.out.println("customerId = " + customerId);
+		System.out.println("itemId = " + reItemid);
+		System.out.println("count = " + reCount);
+		System.out.println("price = " + rePrice);
+		DistributedTransaction transaction = null;
+		try { 
+			transaction = manager.start();
+		 
+		 	Optional<Result> item = 
+		 		transaction.get( 
+		 			new Get(new Key("item_id", reItemid))
+		 					.forNamespace("orders")
+		 					.forTable("item"));
+		 	if (item.isPresent()){
+		 
+		 		Optional<Result> product_customer = 
+		 				transaction.get( 
+		 					new Get(new Key("item_id", reItemid), 
+		 							new Key("customer_id", customerId))
+		 							.forNamespace("customer")
+		 							.forTable("product"));
+		 		// check if a relation between the item and the customer already exist in table product	
+		 		if (!product_customer.isPresent()){
+		 			System.out.println("Haven't ever exist in product table!");
+		 			System.out.println("So we will create it");
+			
+		 			transaction.put(
+		 				new Put(new Key("item_id", reItemid),
+		 						new Key("customer_id", customerId))
+		 						.withValue("count", reCount)
+		 						.withValue("price", rePrice)
+		 						.forNamespace("customer")
+		 						.forTable("product"));
+						
+		 			System.out.println("Created :)");
+			
+		 		} else{
+		 			int count = product_customer.get().getValue("count").get().getAsInt();
+		 			transaction.put(
+		 				new Put(new Key("item_id", reItemid),
+		 						new Key("customer_id", customerId))
+		 						.withValue("count", count + reCount)
+		 						.withValue("price", rePrice)
+		 						.forNamespace("customer")
+		 						.forTable("product"));	
+		 		}
+		 } else{
+		 	System.out.println("Item doesn't exist in table item");
+		 }
+		 	
+		 transaction.commit();
+		 return String.format("Transaction");
+		 
+		 } catch (Exception e) {
+			 	if (transaction != null) {
+			    	// If an error occurs, abort the transaction
+			    	transaction.abort();
+		  		}
+			 	throw e;
+		}
+	}
+
+
+	/*
+		NEW
+	*/
+	public String newItem(String itemName) throws TransactionException {
+		System.out.println("newItem");
+		//System.out.println("itemName =" + itemName);
+		//System.out.println("	taille =" + itemName.length());
+		DistributedTransaction transaction = null;
+		try { 
+			transaction = manager.start();
+		   	// verif if there is another item with the same name
+		   	
+		   	// find item last id + check if name already used
+		   	System.out.println("last id + check name");
+		   	int i=1;
+		    int vrai = 0;
+		    int vraiItem = 0;       
+		    do{
+				Optional<Result> item =
+		      			transaction.get( 
+		      				new Get(new Key("item_id", i))
+		      						.forNamespace("orders")
+		      						.forTable("item"));
+					
+			
+				if (item.isPresent()){
+					vrai = 0;
+					i = i + 1;
+					String name = item.get().getValue("name").get().getAsString().get();
+					//System.out.println("name =" + name);
+					//System.out.println("	taille =" + name.length());
+					if (name.equals(itemName) == true){
+						vraiItem = 1;
+					}
+				
+				//System.out.println("		vraiItem" + vraiItem);
+				}else{
+					vrai = 1;
+				}
+		    } while ( vrai == 0);
+		    
+			System.out.println(" new rk i = " + i);
+			// future rank is in i
+			// if vraiItem = 1 --> means the name was already used
+			
+			if (vraiItem == 1){
+				System.out.println("An item with this name already exist");
+			} else {
+				System.out.println("Let's create it!");
+				transaction.put(
+				new Put(new Key("item_id", i))
+						.withValue("name", itemName)
+						.forNamespace("orders")
+						.forTable("item"));
+				System.out.println("Finish :)");
+			}
+		
+			transaction.commit();
+				return String.format("Transaction");
+		} catch (Exception e) {
+			if (transaction != null) {
+		    	// If an error occurs, abort the transaction
+		    	transaction.abort();
+		  	}
+			throw e;
+		}
+	   
+	}
 	
 	 @Override
 	 public void close() {

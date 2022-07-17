@@ -19,17 +19,6 @@ public class PlaceOrderCommand implements Callable<Integer> {
 
   @Override
   public Integer call() throws Exception {
-	/*
-    String[] split = orders.split(",", -1);
-    int[] itemIds = new int[split.length];
-    int[] itemCounts = new int[split.length];
-	
-    for (int i = 0; i < split.length; i++) {
-      String[] s = split[i].split(":", -1);
-      itemIds[i] = Integer.parseInt(s[0]);
-      itemCounts[i] = Integer.parseInt(s[1]);
-    }
-	*/
 
     int itemId;
     int itemCount;

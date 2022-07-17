@@ -11,7 +11,9 @@ import picocli.CommandLine.Option;
       LoadInitialDataCommand.class,
       GetOrdersInfoCommand.class,
       GetCustomersInfoCommand.class,
-      PlaceOrderCommand.class
+      PlaceOrderCommand.class,
+      RestockCommand.class,
+      NewItemCommand.class
     })
      
 public class sampleCommand {
