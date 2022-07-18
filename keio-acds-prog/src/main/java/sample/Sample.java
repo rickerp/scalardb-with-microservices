@@ -601,7 +601,7 @@ public class Sample implements AutoCloseable {
 	}
 	
 		/* 
-		RESTOCK
+				RESTOCK
 		 */
 	public String reStock(int customerId, int reItemid, int reCount, float rePrice)
 	  throws TransactionException {
@@ -670,7 +670,7 @@ public class Sample implements AutoCloseable {
 
 
 	/*
-		NEW
+		NEW ITEM
 	*/
 	public String newItem(String itemName) throws TransactionException {
 		System.out.println("newItem");

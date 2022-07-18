@@ -13,7 +13,7 @@ public class RestockCommand implements Callable<Integer>  {
 	  @Parameters(
 	      index = "1",
 	      paramLabel = "ORDERS",
-	      description = "orders. The format is \"<Item ID>:<Count\"")
+	      description = "orders. The format is \"<Item ID>:<Count>:<Price>\"")
 	  private String orders;
 
 	  @Override

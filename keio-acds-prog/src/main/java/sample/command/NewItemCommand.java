@@ -8,7 +8,7 @@ import sample.Sample;
 @Command(name = "NewItem", description = "Place an order")
 public class NewItemCommand implements Callable<Integer> {
 
-	  @Parameters(index = "0", paramLabel = "CUSTOMER_ID", description = "customer ID")
+	  @Parameters(index = "0", paramLabel = "NAME", description = "Item Name")
 	  private String itemName;
 
 
