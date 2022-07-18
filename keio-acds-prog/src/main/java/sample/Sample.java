@@ -603,7 +603,7 @@ public class Sample implements AutoCloseable {
 		/* 
 				RESTOCK
 		 */
-	public String reStock(int customerId, int reItemid, int reCount, float rePrice)
+	public void reStock(int customerId, int reItemid, int reCount, float rePrice)
 	  throws TransactionException {
 		System.out.println("reStock");
 		System.out.println("customerId = " + customerId);
@@ -657,7 +657,7 @@ public class Sample implements AutoCloseable {
 		 }
 		 	
 		 transaction.commit();
-		 return String.format("Transaction");
+		
 		 
 		 } catch (Exception e) {
 			 	if (transaction != null) {
@@ -672,10 +672,8 @@ public class Sample implements AutoCloseable {
 	/*
 		NEW ITEM
 	*/
-	public String newItem(String itemName) throws TransactionException {
+	public void newItem(String itemName) throws TransactionException {
 		System.out.println("newItem");
-		//System.out.println("itemName =" + itemName);
-		//System.out.println("	taille =" + itemName.length());
 		DistributedTransaction transaction = null;
 		try { 
 			transaction = manager.start();
@@ -684,8 +682,8 @@ public class Sample implements AutoCloseable {
 		   	// find item last id + check if name already used
 		   	System.out.println("last id + check name");
 		   	int i=1;
-		    int vrai = 0;
-		    int vraiItem = 0;       
+		    int is = 0;
+		    int isItem = 0;       
 		    do{
 				Optional<Result> item =
 		      			transaction.get( 
@@ -695,26 +693,26 @@ public class Sample implements AutoCloseable {
 					
 			
 				if (item.isPresent()){
-					vrai = 0;
+					is = 0;
 					i = i + 1;
 					String name = item.get().getValue("name").get().getAsString().get();
 					//System.out.println("name =" + name);
 					//System.out.println("	taille =" + name.length());
 					if (name.equals(itemName) == true){
-						vraiItem = 1;
+						isItem = 1;
 					}
 				
 				//System.out.println("		vraiItem" + vraiItem);
 				}else{
-					vrai = 1;
+					is = 1;
 				}
-		    } while ( vrai == 0);
+		    } while ( is == 0);
 		    
-			System.out.println(" new rk i = " + i);
+			System.out.println(" new id i = " + i);
 			// future rank is in i
 			// if vraiItem = 1 --> means the name was already used
 			
-			if (vraiItem == 1){
+			if (isItem == 1){
 				System.out.println("An item with this name already exist");
 			} else {
 				System.out.println("Let's create it!");
@@ -727,7 +725,7 @@ public class Sample implements AutoCloseable {
 			}
 		
 			transaction.commit();
-				return String.format("Transaction");
+				
 		} catch (Exception e) {
 			if (transaction != null) {
 		    	// If an error occurs, abort the transaction
@@ -736,6 +734,66 @@ public class Sample implements AutoCloseable {
 			throw e;
 		}
 	   
+	}
+	
+	public void updateCustomer(String cName, float treasury, int type) throws TransactionException {
+		System.out.println("newCustomer");
+		DistributedTransaction transaction = null;
+		try { 
+			transaction = manager.start();
+		   	// verif if there is another item with the same name
+		   	
+		   	// find item last id + check if name already used
+		   	System.out.println("last id + check name");
+		   	int i=0;
+		    int is = 0;
+		    do{
+		    	i = i + 1;
+				Optional<Result> customer =
+		      			transaction.get( 
+		      				new Get(new Key("customer_id", i))
+		      						.forNamespace("customer")
+		      						.forTable("customers"));
+					
+			
+				if (customer.isPresent()){
+					
+					String name = customer.get().getValue("name").get().getAsString().get();
+					//System.out.println("name =" + name);
+					//System.out.println("	taille =" + name.length());
+					if (name.equals(cName) == true){
+						is = 1;
+					}
+				
+				//System.out.println("		vraiItem" + vraiItem);
+				}else{
+					is = 1;
+				}
+		    } while (is == 0);
+		    
+			System.out.println(" id = " + i);
+			// future rank is in i
+			// if vraiItem = 1 --> means the name was already used
+			
+			System.out.println("Let's create it!");
+			transaction.put(
+			new Put(new Key("customer_id", i))
+					.withValue("name", cName)
+					.withValue("treasury", treasury)
+					.withValue("type", type)
+					.forNamespace("customer")
+					.forTable("customers"));
+			
+			System.out.println("Finish :)");		
+			transaction.commit();
+				
+		} catch (Exception e) {
+			if (transaction != null) {
+		    	// If an error occurs, abort the transaction
+		    	transaction.abort();
+		  	}
+			throw e;
+		}
 	}
 	
 	 @Override

@@ -13,7 +13,8 @@ import picocli.CommandLine.Option;
       GetCustomersInfoCommand.class,
       PlaceOrderCommand.class,
       RestockCommand.class,
-      NewItemCommand.class
+      NewItemCommand.class,
+      UpdateCustomerCommand.class
     })
      
 public class sampleCommand {

@@ -5,7 +5,7 @@ import picocli.CommandLine.Command;
 import picocli.CommandLine.Parameters;
 import sample.Sample;
 
-@Command(name = "NewItem", description = "Place an order")
+@Command(name = "NewItem", description = "Create a new item")
 public class NewItemCommand implements Callable<Integer> {
 
 	  @Parameters(index = "0", paramLabel = "NAME", description = "Item Name")
@@ -18,7 +18,7 @@ public class NewItemCommand implements Callable<Integer> {
 		
 	    try (Sample sample = new Sample()) {
 	      //System.out.println(sample.placeOrder(customerId, itemIds, itemCounts));
-	      System.out.println(sample.newItem(itemName));
+	      sample.newItem(itemName);
 	    }
 
 	    return 0;
