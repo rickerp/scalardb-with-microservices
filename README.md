@@ -63,6 +63,9 @@ Then you connect to MySQL and PostgreSQL.
  - `GetOrdersInfo` used to display the first 100 rows of each tables in the database `orders`.
  - `GetCustomersInfo` used to display the first 100 rows of each table in the database `customer`.
  - `PlaceOrder <toId> <itemId>:<count>:<fromId>` used to create an transaction between the customer `fromId` and the customer `toId`. The item send is the `itemId` with the amount `count`. 
+ - `ReStock <customerId> <itemId>:<count>:<price>` used to modify the amount of item `itemId` for the customer `customerId`. Generally this command is used to simulate a restocking.  
+ - `NewItem <name>` used to add a item in the order.item table. the `name` need to be unique.
+ - `UpdateCustomer <customerId> <treasury>:<type>` used to create a new customer or modify the information of an existing customer. If `type==1` the customer is a supermarcket. If `type==2` the customer is a supplier. The default value is `1`.  
  
  Other commands are in preparation and the `README.md` will be updated with each addition. 
 
