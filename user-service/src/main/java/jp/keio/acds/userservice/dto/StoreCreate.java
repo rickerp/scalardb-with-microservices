@@ -18,11 +18,14 @@ import javax.annotation.Generated;
  * StoreCreate
  */
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2022-07-21T00:36:48.271+09:00[Asia/Tokyo]")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2022-07-21T01:15:32.795+09:00[Asia/Tokyo]")
 public class StoreCreate {
 
   @JsonProperty("name")
   private String name;
+
+  @JsonProperty("store_type")
+  private String storeType;
 
   public StoreCreate name(String name) {
     this.name = name;
@@ -43,6 +46,25 @@ public class StoreCreate {
     this.name = name;
   }
 
+  public StoreCreate storeType(String storeType) {
+    this.storeType = storeType;
+    return this;
+  }
+
+  /**
+   * Get storeType
+   * @return storeType
+  */
+  
+  @Schema(name = "store_type", example = "CONVENIENCE_STORE", required = false)
+  public String getStoreType() {
+    return storeType;
+  }
+
+  public void setStoreType(String storeType) {
+    this.storeType = storeType;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -52,12 +74,13 @@ public class StoreCreate {
       return false;
     }
     StoreCreate storeCreate = (StoreCreate) o;
-    return Objects.equals(this.name, storeCreate.name);
+    return Objects.equals(this.name, storeCreate.name) &&
+        Objects.equals(this.storeType, storeCreate.storeType);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(name);
+    return Objects.hash(name, storeType);
   }
 
   @Override
@@ -65,6 +88,7 @@ public class StoreCreate {
     StringBuilder sb = new StringBuilder();
     sb.append("class StoreCreate {\n");
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
+    sb.append("    storeType: ").append(toIndentedString(storeType)).append("\n");
     sb.append("}");
     return sb.toString();
   }

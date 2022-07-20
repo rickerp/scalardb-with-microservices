@@ -42,7 +42,13 @@ paths:
         description: Store fields
         required: true
       responses:
-        "405":
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Store'
+          description: successful store creation
+        "400":
           content: {}
           description: Invalid input
       summary: Create a new store
@@ -73,7 +79,9 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Store'
-          description: successful operation
+          description: successful listing of stores
+        "404":
+          description: store with id inputted not found
       summary: Get store by id
       tags:
       - store
