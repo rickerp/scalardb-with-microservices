@@ -1,4 +1,4 @@
-package jp.keio.acds.userservice.table;
+package jp.keio.acds.userservice.repository;
 
 public class UserTable {
     public static final String id = "id";

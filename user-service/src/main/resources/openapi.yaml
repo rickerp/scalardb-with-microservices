@@ -89,6 +89,9 @@ components:
         name:
           example: Miguels Conbini
           type: string
+        store_type:
+          example: CONVENIENCE_STORE
+          type: string
       required:
       - name
       type: object
@@ -114,6 +117,16 @@ components:
           type: string
       required:
       - id
+      - name
+      type: object
+    UserCreate:
+      example:
+        name: Org
+      properties:
+        name:
+          example: Org
+          type: string
+      required:
       - name
       type: object
     User:

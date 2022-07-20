@@ -5,11 +5,12 @@ import com.scalar.db.api.*;
 import com.scalar.db.exception.transaction.TransactionException;
 import com.scalar.db.io.Key;
 import jp.keio.acds.userservice.dto.Store;
-import jp.keio.acds.userservice.table.StoreTable;
+import jp.keio.acds.userservice.dto.StoreCreate;
+import jp.keio.acds.userservice.dto.User;
+import jp.keio.acds.userservice.dto.UserCreate;
 import org.springframework.stereotype.Repository;
 
 import java.time.OffsetDateTime;
-import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -30,11 +31,12 @@ public class StoreRepository extends UserRepository {
         return tx.scan(scan.all().build()).stream().map(this::toDto).toArray(Store[]::new);
     }
 
-    public Store create(DistributedTransaction tx) throws TransactionException {
+    public Store create(DistributedTransaction tx, StoreCreate store_in) throws TransactionException {
+        UserCreate user_in = new UserCreate();
+        user_in.name(store_in.getName());
+        User user = userRepo.create(tx, user_in);
 
-
-        Key store_id = Key.ofText(StoreTable.id, UUID.randomUUID().toString());
-        tx.put(put.partitionKey(store_id).);
+        tx.put(put.partitionKey(Key.ofText(StoreTable.id, user.getId().toString())).textValue(StoreTable.store_type, store_in));
     }
 
     private Store toDto(Result r) {

@@ -21,7 +21,7 @@ import javax.annotation.Generated;
  * Store
  */
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2022-07-21T00:21:06.629+09:00[Asia/Tokyo]")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2022-07-21T00:36:48.271+09:00[Asia/Tokyo]")
 public class Store {
 
   @JsonProperty("id")
