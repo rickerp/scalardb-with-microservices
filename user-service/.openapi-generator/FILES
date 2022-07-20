@@ -1,4 +1,3 @@
-.openapi-generator-ignore
 README.md
 pom.xml
 src/main/java/jp/keio/acds/userservice/OpenApiGeneratorApplication.java
@@ -10,6 +9,7 @@ src/main/java/jp/keio/acds/userservice/configuration/HomeController.java
 src/main/java/jp/keio/acds/userservice/configuration/SpringDocConfiguration.java
 src/main/java/jp/keio/acds/userservice/dto/Store.java
 src/main/java/jp/keio/acds/userservice/dto/StoreCreate.java
+src/main/java/jp/keio/acds/userservice/dto/User.java
 src/main/resources/application.properties
 src/main/resources/openapi.yaml
 src/test/java/jp/keio/acds/userservice/OpenApiGeneratorApplicationTests.java

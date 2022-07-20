@@ -2,7 +2,6 @@ package jp.keio.acds.userservice.api;
 
 import com.scalar.db.exception.transaction.TransactionException;
 import jp.keio.acds.userservice.dto.Store;
-import jp.keio.acds.userservice.repository.StoreRepository;
 import jp.keio.acds.userservice.service.StoreService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,16 +15,17 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2022-07-15T04:00:53.397+09:00[Asia/Tokyo]")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2022-07-21T00:21:06.629+09:00[Asia/Tokyo]")
 @Controller
 @RequestMapping("${openapi.userService.base-path:}")
 public class StoresApiController implements StoresApi {
     private static final StoreService storeService = new StoreService();
+
+
     private final NativeWebRequest request;
 
     @Autowired
     public StoresApiController(NativeWebRequest request) {
-        super();
         this.request = request;
     }
 

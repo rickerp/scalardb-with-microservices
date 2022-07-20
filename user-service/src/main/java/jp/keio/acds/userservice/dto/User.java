@@ -18,20 +18,17 @@ import java.util.*;
 import javax.annotation.Generated;
 
 /**
- * Store
+ * User
  */
 
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2022-07-21T00:21:06.629+09:00[Asia/Tokyo]")
-public class Store {
+public class User {
 
   @JsonProperty("id")
   private UUID id;
 
   @JsonProperty("name")
   private String name;
-
-  @JsonProperty("store_type")
-  private String storeType;
 
   @JsonProperty("created_at")
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
@@ -41,7 +38,7 @@ public class Store {
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
   private OffsetDateTime updatedAt;
 
-  public Store id(UUID id) {
+  public User id(UUID id) {
     this.id = id;
     return this;
   }
@@ -60,7 +57,7 @@ public class Store {
     this.id = id;
   }
 
-  public Store name(String name) {
+  public User name(String name) {
     this.name = name;
     return this;
   }
@@ -70,7 +67,7 @@ public class Store {
    * @return name
   */
   @NotNull 
-  @Schema(name = "name", example = "Miguels Conbini", required = true)
+  @Schema(name = "name", example = "Some User", required = true)
   public String getName() {
     return name;
   }
@@ -79,26 +76,7 @@ public class Store {
     this.name = name;
   }
 
-  public Store storeType(String storeType) {
-    this.storeType = storeType;
-    return this;
-  }
-
-  /**
-   * Get storeType
-   * @return storeType
-  */
-  
-  @Schema(name = "store_type", example = "CONVENIENCE_STORE", required = false)
-  public String getStoreType() {
-    return storeType;
-  }
-
-  public void setStoreType(String storeType) {
-    this.storeType = storeType;
-  }
-
-  public Store createdAt(OffsetDateTime createdAt) {
+  public User createdAt(OffsetDateTime createdAt) {
     this.createdAt = createdAt;
     return this;
   }
@@ -117,7 +95,7 @@ public class Store {
     this.createdAt = createdAt;
   }
 
-  public Store updatedAt(OffsetDateTime updatedAt) {
+  public User updatedAt(OffsetDateTime updatedAt) {
     this.updatedAt = updatedAt;
     return this;
   }
@@ -144,26 +122,24 @@ public class Store {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    Store store = (Store) o;
-    return Objects.equals(this.id, store.id) &&
-        Objects.equals(this.name, store.name) &&
-        Objects.equals(this.storeType, store.storeType) &&
-        Objects.equals(this.createdAt, store.createdAt) &&
-        Objects.equals(this.updatedAt, store.updatedAt);
+    User user = (User) o;
+    return Objects.equals(this.id, user.id) &&
+        Objects.equals(this.name, user.name) &&
+        Objects.equals(this.createdAt, user.createdAt) &&
+        Objects.equals(this.updatedAt, user.updatedAt);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, name, storeType, createdAt, updatedAt);
+    return Objects.hash(id, name, createdAt, updatedAt);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class Store {\n");
+    sb.append("class User {\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
-    sb.append("    storeType: ").append(toIndentedString(storeType)).append("\n");
     sb.append("    createdAt: ").append(toIndentedString(createdAt)).append("\n");
     sb.append("    updatedAt: ").append(toIndentedString(updatedAt)).append("\n");
     sb.append("}");
