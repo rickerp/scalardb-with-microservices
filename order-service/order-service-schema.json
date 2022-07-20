@@ -4,14 +4,11 @@
     "partition-key": [
       "id"
     ],
-    "clustering-key": [
-      "timestamp"
-    ],
     "columns": {
       "id": "TEXT",
       "from_id": "TEXT",
       "to_id": "TEXT",
-      "timestamp": "BIGINT"
+      "timestamp": "TEXT"
     }
   },
   "order-service.order_product": {
@@ -33,7 +30,6 @@
     "partition-key": [
       "id"
     ],
-    "clustering-key": [],
     "columns": {
       "id": "TEXT",
       "name": "TEXT",
