@@ -32,8 +32,9 @@
     ],
     "columns": {
       "id": "TEXT",
+      "owner_id": "TEXT",
       "name": "TEXT",
-      "price": "INT"
+      "price": "DOUBLE"
     }
   }
 }
