@@ -2,17 +2,15 @@ package jp.keio.acds.orderservice.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-
 import lombok.Builder;
 import lombok.Getter;
 
+import java.util.List;
+
 @Getter
 @Builder
-@JsonDeserialize(builder = GetProductDto.GetProductDtoBuilder.class)
-public class GetProductDto {
-    @JsonProperty("product_id")
-    String productId;
-
+@JsonDeserialize(builder = CreateProductDto.CreateProductDtoBuilder.class)
+public class CreateProductDto {
     @JsonProperty("owner_id")
     String ownerId;
 
@@ -20,6 +18,5 @@ public class GetProductDto {
     String name;
 
     @JsonProperty("price")
-    double price;
+    Double price;
 }
-

@@ -11,7 +11,7 @@ import java.util.List;
 @Builder
 @JsonDeserialize(builder = GetOrderDto.GetOrderDtoBuilder.class)
 public class GetOrderDto {
-    @JsonProperty("id")
+    @JsonProperty("order_id")
     String orderId;
 
     @JsonProperty("from_id")
