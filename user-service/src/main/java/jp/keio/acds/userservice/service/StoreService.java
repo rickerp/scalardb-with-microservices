@@ -28,7 +28,7 @@ public class StoreService extends BaseApiController {
     public Store create(StoreCreate storeIn) throws TransactionException {
         DistributedTransaction tx = startTransaction();
         Store store = storeRepo.create(tx, storeIn);
-        tx.abort();
+        tx.commit();
         return store;
     }
 }

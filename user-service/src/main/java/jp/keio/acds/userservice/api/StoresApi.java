@@ -31,7 +31,7 @@ import java.util.Map;
 import java.util.Optional;
 import javax.annotation.Generated;
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2022-07-21T01:15:32.795+09:00[Asia/Tokyo]")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2022-07-21T02:33:08.865+09:00[Asia/Tokyo]")
 @Validated
 @Tag(name = "stores", description = "Store model")
 public interface StoresApi {
@@ -44,24 +44,38 @@ public interface StoresApi {
      * POST /stores : Create a new store
      *
      * @param body Store fields (required)
-     * @return Invalid input (status code 405)
+     * @return successful store creation (status code 200)
+     *         or Invalid input (status code 400)
      */
     @Operation(
         operationId = "createStore",
         summary = "Create a new store",
         tags = { "store" },
         responses = {
-            @ApiResponse(responseCode = "405", description = "Invalid input")
+            @ApiResponse(responseCode = "200", description = "successful store creation", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = Store.class))
+            }),
+            @ApiResponse(responseCode = "400", description = "Invalid input")
         }
     )
     @RequestMapping(
         method = RequestMethod.POST,
         value = "/stores",
+        produces = { "application/json" },
         consumes = { "application/json" }
     )
-    default ResponseEntity<Void> createStore(
+    default ResponseEntity<Store> createStore(
         @Parameter(name = "body", description = "Store fields", required = true) @Valid @RequestBody StoreCreate body
     ) {
+        getRequest().ifPresent(request -> {
+            for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
+                if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
+                    String exampleString = "{ \"name\" : \"Miguels Conbini\", \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\" }";
+                    ApiUtil.setExampleResponse(request, "application/json", exampleString);
+                    break;
+                }
+            }
+        });
         return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
 
     }
@@ -72,16 +86,18 @@ public interface StoresApi {
      * Gets a single store by id
      *
      * @param storeId ID of store to return (required)
-     * @return successful operation (status code 200)
+     * @return successful listing of stores (status code 200)
+     *         or store with id inputted not found (status code 404)
      */
     @Operation(
         operationId = "getStore",
         summary = "Get store by id",
         tags = { "store" },
         responses = {
-            @ApiResponse(responseCode = "200", description = "successful operation", content = {
+            @ApiResponse(responseCode = "200", description = "successful listing of stores", content = {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = Store.class))
-            })
+            }),
+            @ApiResponse(responseCode = "404", description = "store with id inputted not found")
         }
     )
     @RequestMapping(
