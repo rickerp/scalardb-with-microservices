@@ -12,10 +12,10 @@ import lombok.Getter;
 @JsonDeserialize(builder = OrderDto.OrderDtoBuilder.class)
 public class OrderDto {
     @JsonProperty("from_id")
-    int fromId;
+    String fromId;
 
     @JsonProperty("to_id")
-    int toId;
+    String toId;
 
     @JsonProperty("order_products")
     List<OrderProductDto> orderProducts;

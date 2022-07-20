@@ -11,7 +11,7 @@ import java.util.UUID;
 @Repository
 public class OrderRepository {
 
-    private static final String NAMESPACE = "orderservice";
+    private static final String NAMESPACE = "order-service";
     private static final String TABLE_NAME = "order";
     private static final String ORDER_ID = "id";
     private static final String FROM_ID = "from_id";
@@ -27,9 +27,9 @@ public class OrderRepository {
                 .namespace(NAMESPACE)
                 .table(TABLE_NAME)
                 .partitionKey(Key.ofText(ORDER_ID, orderId))
-                .intValue(FROM_ID, orderDto.getFromId())
-                .intValue(TO_ID, orderDto.getToId())
-                .bigIntValue(TIMESTAMP, System.currentTimeMillis())
+                .clusteringKey(Key.ofBigInt(TIMESTAMP, System.currentTimeMillis()))
+                .textValue(FROM_ID, orderDto.getFromId())
+                .textValue(TO_ID, orderDto.getToId())
                 .build();
 
         tx.put(put);

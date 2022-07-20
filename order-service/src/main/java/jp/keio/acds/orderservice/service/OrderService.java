@@ -47,8 +47,14 @@ public class OrderService {
                 return orderId;
             } catch (CommitConflictException | CrudConflictException e) {
                 retryTransaction(++retryCount);
-            } catch (CommitException | CrudException | UnknownTransactionStatusException e) {
-                throw new ServiceException("ERROR : Failed to create order", e);
+            //} catch (CommitException | CrudException | UnknownTransactionStatusException e) {
+                //throw new ServiceException("ERROR : Failed to create order", e);
+            } catch (CommitException e) {
+                throw new ServiceException("ERROR : Failed to create order (A)", e);
+            } catch (CrudException e) {
+                throw new ServiceException("ERROR : Failed to create order (B)", e);
+            } catch (UnknownTransactionStatusException e) {
+                throw new ServiceException("ERROR : Failed to create order (C)", e);
             } finally {
                 abortTransaction(tx);
             }
