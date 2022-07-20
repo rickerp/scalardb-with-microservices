@@ -10,7 +10,7 @@ import lombok.Getter;
 @JsonDeserialize(builder = OrderProductDto.OrderProductDtoBuilder.class)
 public class OrderProductDto {
     @JsonProperty("product")
-    ProductDto product;
+    GetProductDto product;
 
     @JsonProperty("count")
     int count;

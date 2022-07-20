@@ -3,7 +3,9 @@ package jp.keio.acds.orderservice.service;
 import com.scalar.db.api.DistributedTransaction;
 import com.scalar.db.api.DistributedTransactionManager;
 import com.scalar.db.exception.transaction.*;
-import jp.keio.acds.orderservice.dto.OrderDto;
+import jp.keio.acds.orderservice.dto.CreateOrderDto;
+import jp.keio.acds.orderservice.dto.GetOrderDto;
+import jp.keio.acds.orderservice.exception.OrderNotFoundException;
 import jp.keio.acds.orderservice.exception.ServiceException;
 import jp.keio.acds.orderservice.repository.OrderRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -35,38 +37,50 @@ public class OrderService {
         this.manager = manager;
     }
 
-    public String createOrder(OrderDto orderDto) throws InterruptedException {
+    public String createOrder(CreateOrderDto createOrderDto) throws InterruptedException {
         int retryCount = 0;
 
         while (true) {
             DistributedTransaction tx = startTransaction();
 
             try {
-                String orderId = orderRepository.createOrder(tx, orderDto);
+                String orderId = orderRepository.createOrder(tx, createOrderDto);
                 tx.commit();
                 return orderId;
             } catch (CommitConflictException | CrudConflictException e) {
                 retryTransaction(++retryCount);
-            //} catch (CommitException | CrudException | UnknownTransactionStatusException e) {
-                //throw new ServiceException("ERROR : Failed to create order", e);
-            } catch (CommitException e) {
-                throw new ServiceException("ERROR : Failed to create order (A)", e);
-            } catch (CrudException e) {
-                throw new ServiceException("ERROR : Failed to create order (B)", e);
-            } catch (UnknownTransactionStatusException e) {
-                throw new ServiceException("ERROR : Failed to create order (C)", e);
+            } catch (CommitException | CrudException | UnknownTransactionStatusException e) {
+                throw new ServiceException("ERROR : Failed to create order", e);
             } finally {
                 abortTransaction(tx);
             }
         }
     }
 
-    public List<OrderDto> listOrders() {
+    public List<GetOrderDto> listOrders() {
         return null;
     }
 
-    public OrderDto getOrder(int orderId) {
-        return null;
+    public GetOrderDto getOrder(String orderId) throws InterruptedException {
+        int retryCount = 0;
+
+        while (true) {
+            DistributedTransaction tx = startTransaction();
+
+            try {
+                GetOrderDto order = orderRepository.getOrder(tx, orderId);
+                tx.commit();
+                return order;
+            } catch (CommitConflictException | CrudConflictException e) {
+                retryTransaction(++retryCount);
+            } catch (CommitException | CrudException | UnknownTransactionStatusException e) {
+                throw new ServiceException("ERROR : Failed to get order", e);
+            } catch (OrderNotFoundException e) {
+                throw new ServiceException(e.getMessage(), e);
+            } finally {
+                abortTransaction(tx);
+            }
+        }
     }
 
     private DistributedTransaction startTransaction() {

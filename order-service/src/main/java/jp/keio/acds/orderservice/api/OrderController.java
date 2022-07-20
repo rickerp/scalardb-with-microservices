@@ -1,6 +1,7 @@
 package jp.keio.acds.orderservice.api;
 
-import jp.keio.acds.orderservice.dto.OrderDto;
+import jp.keio.acds.orderservice.dto.CreateOrderDto;
+import jp.keio.acds.orderservice.dto.GetOrderDto;
 import jp.keio.acds.orderservice.service.OrderService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -18,17 +19,17 @@ public class OrderController {
 
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
-    public String createOrder(@RequestBody OrderDto orderDto) throws Exception {
-        return orderService.createOrder(orderDto);
+    public String createOrder(@RequestBody CreateOrderDto createOrderDto) throws InterruptedException {
+        return orderService.createOrder(createOrderDto);
     }
 
     @GetMapping()
-    public List<OrderDto> listOrders() {
+    public List<GetOrderDto> listOrders() {
         return this.orderService.listOrders();
     }
 
     @GetMapping("/{order_id}")
-    public OrderDto getOrder(@PathVariable("order_id") int orderId) {
+    public GetOrderDto getOrder(@PathVariable("order_id") String orderId) throws InterruptedException {
         return this.orderService.getOrder(orderId);
     }
 }

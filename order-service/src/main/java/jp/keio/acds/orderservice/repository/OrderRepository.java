@@ -3,9 +3,13 @@ package jp.keio.acds.orderservice.repository;
 import com.scalar.db.api.*;
 import com.scalar.db.exception.transaction.*;
 import com.scalar.db.io.Key;
-import jp.keio.acds.orderservice.dto.OrderDto;
+import jp.keio.acds.orderservice.dto.CreateOrderDto;
+import jp.keio.acds.orderservice.dto.GetOrderDto;
+import jp.keio.acds.orderservice.exception.OrderNotFoundException;
+import jp.keio.acds.orderservice.model.Order;
 import org.springframework.stereotype.Repository;
 
+import java.time.Instant;
 import java.util.UUID;
 
 @Repository
@@ -19,7 +23,7 @@ public class OrderRepository {
     private static final String TIMESTAMP = "timestamp";
 
 
-    public String createOrder(DistributedTransaction tx, OrderDto orderDto) throws CrudException {
+    public String createOrder(DistributedTransaction tx, CreateOrderDto createOrderDto) throws CrudException {
         String orderId = UUID.randomUUID().toString();
 
         //TODO check if order_id already exists
@@ -27,16 +31,33 @@ public class OrderRepository {
                 .namespace(NAMESPACE)
                 .table(TABLE_NAME)
                 .partitionKey(Key.ofText(ORDER_ID, orderId))
-                .clusteringKey(Key.ofBigInt(TIMESTAMP, System.currentTimeMillis()))
-                .textValue(FROM_ID, orderDto.getFromId())
-                .textValue(TO_ID, orderDto.getToId())
+                .textValue(FROM_ID, createOrderDto.getFromId())
+                .textValue(TO_ID, createOrderDto.getToId())
+                .textValue(TIMESTAMP, Instant.now().toString())
                 .build();
 
         tx.put(put);
         return orderId;
     }
 
-    public OrderDto getOrder(String orderId, DistributedTransaction tx) throws AbortException {
-        return null;
+    public GetOrderDto getOrder(DistributedTransaction tx, String orderId) throws CrudException {
+        Get get = Get.newBuilder()
+                .namespace(NAMESPACE)
+                .table(TABLE_NAME)
+                .partitionKey(Key.ofText(ORDER_ID, orderId))
+                .build();
+
+        return toDto(tx.get(get)
+                .orElseThrow(
+                        () -> new OrderNotFoundException("ERROR : Order with ID " + orderId + " does not exist")));
+    }
+
+    private GetOrderDto toDto(Result result) {
+        return GetOrderDto.builder()
+                .orderId(result.getText(ORDER_ID))
+                .fromId(result.getText(FROM_ID))
+                .toId(result.getText(TO_ID))
+                .timestamp(result.getText(TIMESTAMP))
+                .build();
     }
 }

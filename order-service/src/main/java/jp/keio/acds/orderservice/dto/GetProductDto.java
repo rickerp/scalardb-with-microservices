@@ -8,8 +8,8 @@ import lombok.Getter;
 
 @Getter
 @Builder
-@JsonDeserialize(builder = ProductDto.ProductDtoBuilder.class)
-public class ProductDto {
+@JsonDeserialize(builder = GetProductDto.GetProductDtoBuilder.class)
+public class GetProductDto {
     @JsonProperty("name")
     String name;
 
