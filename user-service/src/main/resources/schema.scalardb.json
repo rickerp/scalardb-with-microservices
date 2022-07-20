@@ -6,8 +6,8 @@
     "columns": {
       "id": "TEXT",
       "name": "TEXT",
-      "created_at": "BIGINT",
-      "updated_at": "BIGINT"
+      "created_at": "TEXT",
+      "updated_at": "TEXT"
     }
   },
   "user-service.store": {

@@ -103,13 +103,37 @@ components:
         name:
           example: Miguels Conbini
           type: string
+        store_type:
+          example: CONVENIENCE_STORE
+          type: string
         created_at:
-          type: string
           format: date-time
+          type: string
         updated_at:
-          type: string
           format: date-time
+          type: string
       required:
       - id
       - name
+      type: object
+    User:
+      example:
+        name: Org
+        id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+      properties:
+        id:
+          format: uuid
+          type: string
+        name:
+          example: Some User
+          type: string
+        created_at:
+          format: date-time
+          type: string
+        updated_at:
+          format: date-time
+          type: string
+      required:
+        - id
+        - name
       type: object
