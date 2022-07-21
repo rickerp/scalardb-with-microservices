@@ -3,10 +3,7 @@ package jp.keio.acds.orderservice.service;
 import com.scalar.db.api.DistributedTransaction;
 import com.scalar.db.api.DistributedTransactionManager;
 import com.scalar.db.exception.transaction.*;
-import jp.keio.acds.orderservice.dto.CreateOrderDto;
-import jp.keio.acds.orderservice.dto.GetOrderDto;
-import jp.keio.acds.orderservice.dto.GetProductDto;
-import jp.keio.acds.orderservice.dto.OrderProductDto;
+import jp.keio.acds.orderservice.dto.*;
 import jp.keio.acds.orderservice.exception.NotFoundException;
 import jp.keio.acds.orderservice.exception.InternalServerErrorException;
 import jp.keio.acds.orderservice.repository.OrderRepository;
@@ -19,16 +16,13 @@ import java.util.concurrent.TimeUnit;
 
 @Service
 @Slf4j
-public class OrderService {
+public class OrderService extends BaseService {
 
     private static final int MAX_TRANSACTION_RETRIES = 3;
 
     private final OrderRepository orderRepository;
 
     private final ProductService productService;
-
-    // For normal transactions
-    private final DistributedTransactionManager manager;
 
     // For two-phase commit transactions
     //private final TwoPhaseCommitTransactionManager twoPhaseCommitTransactionManager;
@@ -38,85 +32,32 @@ public class OrderService {
     public OrderService(OrderRepository orderRepository,
                         DistributedTransactionManager manager,
                         ProductService productService) {
+        super(manager);
         this.orderRepository = orderRepository;
-        this.manager = manager;
         this.productService = productService;
     }
 
     public String createOrder(CreateOrderDto createOrderDto) throws InterruptedException {
-        int retryCount = 0;
-
-        while (true) {
-            DistributedTransaction tx = startTransaction();
-
-            try {
-
-                String orderId = orderRepository.createOrder(tx, createOrderDto);
-                tx.commit();
-                return orderId;
-            } catch (CommitConflictException | CrudConflictException e) {
-                retryTransaction(++retryCount);
-            } catch (CommitException | CrudException | UnknownTransactionStatusException e) {
-                throw new InternalServerErrorException("ERROR : Failed to create order", e);
-            } finally {
-                abortTransaction(tx);
-            }
-        }
-    }
-
-    private GetProductDto getProductDto(OrderProductDto orderProductDto) {
-        try {
-            return productService.getProduct(orderProductDto.getProductId());
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public List<GetOrderDto> listOrders() {
-        return null;
+        return execute(tx -> {
+            String orderId = orderRepository.createOrder(tx, createOrderDto);
+            tx.commit();
+            return orderId;
+        });
     }
 
     public GetOrderDto getOrder(String orderId) throws InterruptedException {
-        int retryCount = 0;
-
-        while (true) {
-            DistributedTransaction tx = startTransaction();
-
-            try {
-                GetOrderDto order = orderRepository.getOrder(tx, orderId);
-                tx.commit();
-                return order;
-            } catch (CommitConflictException | CrudConflictException e) {
-                retryTransaction(++retryCount);
-            } catch (CommitException | CrudException | UnknownTransactionStatusException e) {
-                throw new InternalServerErrorException("ERROR : Failed to get order", e);
-            } finally {
-                abortTransaction(tx);
-            }
-        }
+        return execute(tx -> {
+            GetOrderDto order = orderRepository.getOrder(tx, orderId);
+            tx.commit();
+            return order;
+        });
     }
 
-    private DistributedTransaction startTransaction() {
-        try {
-            return manager.start();
-        } catch (TransactionException e) {
-            throw new InternalServerErrorException("ERROR : Could not start transaction manager", e);
-        }
-    }
-
-    private void retryTransaction(int retryCount) throws InterruptedException {
-        if (retryCount == MAX_TRANSACTION_RETRIES) {
-            throw new InternalServerErrorException("ERROR : Failed transaction after 3 retries");
-        }
-        TimeUnit.MILLISECONDS.sleep(100);
-    }
-
-    private void abortTransaction(DistributedTransaction tx) {
-        try {
-            tx.abort();
-        } catch (AbortException ex) {
-            log.error(ex.getMessage(), ex);
-            throw new InternalServerErrorException("ERROR : Could not abort transaction");
-        }
+    public List<GetOrderDto> listOrders() throws InterruptedException {
+        return execute(tx -> {
+            List<GetOrderDto> getOrderDtoList = orderRepository.listOrders(tx);
+            tx.commit();
+            return getOrderDtoList;
+        });
     }
 }

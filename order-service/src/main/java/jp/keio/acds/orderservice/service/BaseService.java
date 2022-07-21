@@ -9,13 +9,13 @@ import lombok.extern.slf4j.Slf4j;
 import java.util.concurrent.TimeUnit;
 
 @Slf4j
-public abstract class TransactionService {
+public abstract class BaseService {
 
     private static final int MAX_TRANSACTION_RETRIES = 3;
 
     private final DistributedTransactionManager manager;
 
-    TransactionService(DistributedTransactionManager manager) {
+    BaseService(DistributedTransactionManager manager) {
         this.manager = manager;
     }
 

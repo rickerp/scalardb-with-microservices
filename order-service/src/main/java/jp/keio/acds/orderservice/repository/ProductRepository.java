@@ -1,21 +1,19 @@
 package jp.keio.acds.orderservice.repository;
 
 import com.scalar.db.api.DistributedTransaction;
-import com.scalar.db.api.Get;
 import com.scalar.db.api.Put;
 import com.scalar.db.api.Result;
 import com.scalar.db.exception.transaction.CrudException;
 import com.scalar.db.io.Key;
 import jp.keio.acds.orderservice.dto.CreateProductDto;
 import jp.keio.acds.orderservice.dto.GetProductDto;
-import jp.keio.acds.orderservice.exception.NotFoundException;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.UUID;
 
 @Repository
-public class ProductRepository extends ScalarRepository<GetProductDto> {
+public class ProductRepository extends BaseRepository<GetProductDto> {
 
     private static final String NAMESPACE = "order-service";
     private static final String TABLE_NAME = "product";

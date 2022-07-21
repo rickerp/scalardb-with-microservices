@@ -11,12 +11,9 @@ import java.util.List;
 
 
 @Service
-public class ProductService extends TransactionService {
-
-    private static final int MAX_TRANSACTION_RETRIES = 3;
+public class ProductService extends BaseService {
 
     private final ProductRepository productRepository;
-
 
     @Autowired
     public ProductService(ProductRepository productRepository,

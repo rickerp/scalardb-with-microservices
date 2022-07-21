@@ -11,7 +11,7 @@ import jp.keio.acds.orderservice.exception.NotFoundException;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public abstract class ScalarRepository<T> {
+public abstract class BaseRepository<T> {
 
     public T get(DistributedTransaction tx, String id) throws CrudException, NotFoundException {
         return toDto(tx.get(getQuery(id)).orElseThrow(() -> new NotFoundException(id)));

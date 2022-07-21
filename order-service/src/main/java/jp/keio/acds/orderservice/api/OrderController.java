@@ -23,13 +23,13 @@ public class OrderController {
         return orderService.createOrder(createOrderDto);
     }
 
-    @GetMapping()
-    public List<GetOrderDto> listOrders() {
-        return this.orderService.listOrders();
-    }
-
     @GetMapping("/{order_id}")
     public GetOrderDto getOrder(@PathVariable("order_id") String orderId) throws InterruptedException {
         return this.orderService.getOrder(orderId);
+    }
+
+    @GetMapping()
+    public List<GetOrderDto> listOrders() throws InterruptedException {
+        return this.orderService.listOrders();
     }
 }
