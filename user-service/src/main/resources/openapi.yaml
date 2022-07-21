@@ -1,0 +1,432 @@
+openapi: 3.0.1
+info:
+  termsOfService: http://swagger.io/terms/
+  title: User Service
+  version: 0.0.1
+servers:
+- url: /
+tags:
+- description: User model
+  name: users
+- description: Store model
+  name: stores
+- description: Supplier model
+  name: suppliers
+paths:
+  /stores:
+    get:
+      description: Returns a list of stores
+      operationId: listStores
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Store'
+                type: array
+          description: successful operation
+      summary: List stores
+      tags:
+      - stores
+      x-accepts: application/json
+      x-tags:
+      - tag: stores
+    post:
+      operationId: createStore
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StoreCreate'
+        description: Store fields
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Store'
+          description: successful store creation
+        "400":
+          content: {}
+          description: Invalid input
+      summary: Create a new store
+      tags:
+      - stores
+      x-codegen-request-body-name: body
+      x-content-type: application/json
+      x-accepts: application/json
+      x-tags:
+      - tag: stores
+  /stores/{storeId}:
+    delete:
+      description: Deletes a single store by id
+      operationId: deleteStore
+      parameters:
+      - description: ID of the store to delete
+        explode: false
+        in: path
+        name: storeId
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      responses:
+        "200":
+          description: successfully deleted the store
+        "404":
+          description: No store with the id was found
+      summary: Delete store by id
+      tags:
+      - stores
+      x-accepts: application/json
+      x-tags:
+      - tag: stores
+    get:
+      description: Gets a single store by id
+      operationId: getStore
+      parameters:
+      - description: ID of store to return
+        explode: false
+        in: path
+        name: storeId
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Store'
+          description: successfully got the store
+        "404":
+          description: store with id inputted not found
+      summary: Get store by id
+      tags:
+      - stores
+      x-accepts: application/json
+      x-tags:
+      - tag: stores
+    put:
+      description: Update a single store by id
+      operationId: updateStore
+      parameters:
+      - description: ID of the store to update
+        explode: false
+        in: path
+        name: storeId
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StoreUpdate'
+        description: Store fields to update
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Store'
+          description: successfully updated the store
+        "404":
+          description: No store with the id was found
+      summary: Update store by id
+      tags:
+      - stores
+      x-accepts: application/json
+      x-tags:
+      - tag: stores
+      x-content-type: application/json
+  /suppliers:
+    get:
+      description: Returns a list of suppliers
+      operationId: listSuppliers
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Supplier'
+                type: array
+          description: successful operation
+      summary: List suppliers
+      tags:
+      - suppliers
+      x-accepts: application/json
+      x-tags:
+      - tag: suppliers
+    post:
+      operationId: createSupplier
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SupplierCreate'
+        description: Supplier fields
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Supplier'
+          description: successful supplier creation
+        "400":
+          content: {}
+          description: Invalid input
+      summary: Create a new supplier
+      tags:
+      - suppliers
+      x-codegen-request-body-name: body
+      x-content-type: application/json
+      x-accepts: application/json
+      x-tags:
+      - tag: suppliers
+  /suppliers/{supplierId}:
+    delete:
+      description: Deletes a single supplier by id
+      operationId: deleteSupplier
+      parameters:
+      - description: ID of the supplier to delete
+        explode: false
+        in: path
+        name: supplierId
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      responses:
+        "200":
+          description: successfully deleted the supplier
+        "404":
+          description: No supplier with the id was found
+      summary: Delete supplier by id
+      tags:
+      - suppliers
+      x-accepts: application/json
+      x-tags:
+      - tag: suppliers
+    get:
+      description: Gets a single supplier by id
+      operationId: getSupplier
+      parameters:
+      - description: ID of supplier to return
+        explode: false
+        in: path
+        name: supplierId
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Supplier'
+          description: successful listing of suppliers
+        "404":
+          description: supplier with id inputted not found
+      summary: Get supplier by id
+      tags:
+      - suppliers
+      x-accepts: application/json
+      x-tags:
+      - tag: suppliers
+    put:
+      description: Update a single supplier by id
+      operationId: updateSupplier
+      parameters:
+      - description: ID of the supplier to update
+        explode: false
+        in: path
+        name: supplierId
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SupplierUpdate'
+        description: Supplier fields to update
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Supplier'
+          description: successfully updated the supplier
+        "404":
+          description: No supplier with the id was found
+      summary: Update supplier by id
+      tags:
+      - suppliers
+      x-accepts: application/json
+      x-tags:
+      - tag: suppliers
+      x-content-type: application/json
+components:
+  schemas:
+    UserUpdate:
+      example:
+        name: Org
+      properties:
+        name:
+          example: Org
+          type: string
+      type: object
+    UserCreate:
+      example:
+        name: Org
+      properties:
+        name:
+          example: Org
+          type: string
+      required:
+      - name
+      type: object
+    User:
+      example:
+        id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        name: Some Org
+        created_at: 2022-07-21T02:05:41.527664Z
+        updated_at: 2022-07-21T02:05:41.527664Z
+      properties:
+        id:
+          format: uuid
+          type: string
+        name:
+          type: string
+        created_at:
+          format: date-time
+          type: string
+        updated_at:
+          format: date-time
+          type: string
+      required:
+      - name
+      type: object
+    StoreUpdate:
+      example:
+        name: Miguel Conbini
+        store_type: CONVENIENCE_STORE
+      properties:
+        name:
+          example: Miguel Conbini
+          type: string
+        store_type:
+          example: CONVENIENCE_STORE
+          type: string
+      type: object
+    StoreCreate:
+      example:
+        name: Miguels Conbini
+        store_type: CONVENIENCE_STORE
+      properties:
+        name:
+          type: string
+        store_type:
+          type: string
+      required:
+      - name
+      - store_type
+      type: object
+    Store:
+      example:
+        name: Miguels Conbini
+        id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        store_type: CONVENIENCE_STORE
+        created_at: 2022-07-21T02:05:41.527664Z
+        updated_at: 2022-07-21T02:05:41.527664Z
+      properties:
+        id:
+          format: uuid
+          type: string
+        name:
+          type: string
+        store_type:
+          type: string
+        created_at:
+          format: date-time
+          type: string
+        updated_at:
+          format: date-time
+          type: string
+      required:
+      - created_at
+      - id
+      - name
+      - store_type
+      - updated_at
+      type: object
+    SupplierUpdate:
+      example:
+        name: Ricardo Meat
+        product_type: MEAT
+      properties:
+        name:
+          example: Ricardo Meat
+          type: string
+        product_type:
+          example: MEAT
+          type: string
+      type: object
+    SupplierCreate:
+      example:
+        name: Ricardo Meat
+        product_type: MEAT
+      properties:
+        name:
+          type: string
+        product_type:
+          type: string
+      required:
+      - name
+      - product_type
+      type: object
+    Supplier:
+      example:
+        id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        name: Ricardo's Meat
+        product_type: MEAT
+        created_at: 2022-07-21T02:05:41.527664Z
+        updated_at: 2022-07-21T02:05:41.527664Z
+      properties:
+        id:
+          format: uuid
+          type: string
+        name:
+          type: string
+        product_type:
+          type: string
+        created_at:
+          format: date-time
+          type: string
+        updated_at:
+          format: date-time
+          type: string
+      required:
+      - created_at
+      - id
+      - name
+      - product_type
+      - updated_at
+      type: object
