@@ -15,16 +15,16 @@ import java.util.*;
 import javax.annotation.Generated;
 
 /**
- * UserCreate
+ * UserUpdate
  */
 
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2022-07-21T12:01:45.170+09:00[Asia/Tokyo]")
-public class UserCreate {
+public class UserUpdate {
 
   @JsonProperty("name")
   private String name;
 
-  public UserCreate name(String name) {
+  public UserUpdate name(String name) {
     this.name = name;
     return this;
   }
@@ -33,8 +33,8 @@ public class UserCreate {
    * Get name
    * @return name
   */
-  @NotNull 
-  @Schema(name = "name", example = "Org", required = true)
+  
+  @Schema(name = "name", example = "Org", required = false)
   public String getName() {
     return name;
   }
@@ -51,8 +51,8 @@ public class UserCreate {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    UserCreate userCreate = (UserCreate) o;
-    return Objects.equals(this.name, userCreate.name);
+    UserUpdate userUpdate = (UserUpdate) o;
+    return Objects.equals(this.name, userUpdate.name);
   }
 
   @Override
@@ -63,7 +63,7 @@ public class UserCreate {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class UserCreate {\n");
+    sb.append("class UserUpdate {\n");
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
     sb.append("}");
     return sb.toString();

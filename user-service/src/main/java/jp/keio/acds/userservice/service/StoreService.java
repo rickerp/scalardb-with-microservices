@@ -11,11 +11,10 @@ import java.util.UUID;
 public class StoreService extends BaseService {
     private static final StoreRepository storeRepo = new StoreRepository();
 
-    public Store get(UUID storeId) throws TransactionException {
-        DistributedTransaction tx = startTransaction();
-        Store store = storeRepo.get(tx, storeId);
-        tx.abort();
-        return store;
+    public Store get(UUID storeId) {
+        return this.execute(tx -> {
+            return storeRepo.get(tx, storeId);
+        });
     }
 
     public Store[] list() throws TransactionException {

@@ -21,7 +21,7 @@ import javax.annotation.Generated;
  * Supplier
  */
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2022-07-21T11:41:32.293+09:00[Asia/Tokyo]")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2022-07-21T12:01:45.170+09:00[Asia/Tokyo]")
 public class Supplier {
 
   @JsonProperty("id")
@@ -88,8 +88,8 @@ public class Supplier {
    * Get productType
    * @return productType
   */
-  
-  @Schema(name = "product_type", required = false)
+  @NotNull 
+  @Schema(name = "product_type", required = true)
   public String getProductType() {
     return productType;
   }
@@ -107,8 +107,8 @@ public class Supplier {
    * Get createdAt
    * @return createdAt
   */
-  @Valid 
-  @Schema(name = "created_at", required = false)
+  @NotNull @Valid 
+  @Schema(name = "created_at", required = true)
   public OffsetDateTime getCreatedAt() {
     return createdAt;
   }
@@ -126,8 +126,8 @@ public class Supplier {
    * Get updatedAt
    * @return updatedAt
   */
-  @Valid 
-  @Schema(name = "updated_at", required = false)
+  @NotNull @Valid 
+  @Schema(name = "updated_at", required = true)
   public OffsetDateTime getUpdatedAt() {
     return updatedAt;
   }

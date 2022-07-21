@@ -18,7 +18,7 @@ import javax.annotation.Generated;
  * SupplierCreate
  */
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2022-07-21T11:41:32.293+09:00[Asia/Tokyo]")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2022-07-21T12:01:45.170+09:00[Asia/Tokyo]")
 public class SupplierCreate {
 
   @JsonProperty("name")
@@ -55,8 +55,8 @@ public class SupplierCreate {
    * Get productType
    * @return productType
   */
-  
-  @Schema(name = "product_type", required = false)
+  @NotNull 
+  @Schema(name = "product_type", required = true)
   public String getProductType() {
     return productType;
   }

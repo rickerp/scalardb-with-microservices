@@ -60,6 +60,30 @@ paths:
       x-tags:
       - tag: stores
   /stores/{storeId}:
+    delete:
+      description: Deletes a single store by id
+      operationId: deleteStore
+      parameters:
+      - description: ID of the store to delete
+        explode: false
+        in: path
+        name: storeId
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      responses:
+        "200":
+          description: successfully deleted the store
+        "404":
+          description: No store with the id was found
+      summary: Delete store by id
+      tags:
+      - stores
+      x-accepts: application/json
+      x-tags:
+      - tag: stores
     get:
       description: Gets a single store by id
       operationId: getStore
@@ -79,7 +103,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Store'
-          description: successful listing of stores
+          description: successfully got the store
         "404":
           description: store with id inputted not found
       summary: Get store by id
@@ -88,6 +112,42 @@ paths:
       x-accepts: application/json
       x-tags:
       - tag: stores
+    put:
+      description: Update a single store by id
+      operationId: updateStore
+      parameters:
+      - description: ID of the store to update
+        explode: false
+        in: path
+        name: storeId
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StoreUpdate'
+        description: Store fields to update
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Store'
+          description: successfully updated the store
+        "404":
+          description: No store with the id was found
+      summary: Update store by id
+      tags:
+      - stores
+      x-accepts: application/json
+      x-tags:
+      - tag: stores
+      x-content-type: application/json
   /suppliers:
     get:
       description: Returns a list of suppliers
@@ -135,6 +195,30 @@ paths:
       x-tags:
       - tag: suppliers
   /suppliers/{supplierId}:
+    delete:
+      description: Deletes a single supplier by id
+      operationId: deleteSupplier
+      parameters:
+      - description: ID of the supplier to delete
+        explode: false
+        in: path
+        name: supplierId
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      responses:
+        "200":
+          description: successfully deleted the supplier
+        "404":
+          description: No supplier with the id was found
+      summary: Delete supplier by id
+      tags:
+      - suppliers
+      x-accepts: application/json
+      x-tags:
+      - tag: suppliers
     get:
       description: Gets a single supplier by id
       operationId: getSupplier
@@ -163,81 +247,51 @@ paths:
       x-accepts: application/json
       x-tags:
       - tag: suppliers
+    put:
+      description: Update a single supplier by id
+      operationId: updateSupplier
+      parameters:
+      - description: ID of the supplier to update
+        explode: false
+        in: path
+        name: supplierId
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SupplierUpdate'
+        description: Supplier fields to update
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Supplier'
+          description: successfully updated the supplier
+        "404":
+          description: No supplier with the id was found
+      summary: Update supplier by id
+      tags:
+      - suppliers
+      x-accepts: application/json
+      x-tags:
+      - tag: suppliers
+      x-content-type: application/json
 components:
   schemas:
-    SupplierCreate:
+    UserUpdate:
       example:
-        name: Ricardo's Meat
-        product_type: MEAT
+        name: Org
       properties:
         name:
+          example: Org
           type: string
-        product_type:
-          type: string
-      required:
-      - name
-      type: object
-    Supplier:
-      example:
-        id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-        name: Ricardo's Meat
-        product_type: MEAT
-        created_at: 2022-07-21T02:05:41.527664Z
-        updated_at: 2022-07-21T02:05:41.527664Z
-      properties:
-        id:
-          format: uuid
-          type: string
-        name:
-          type: string
-        product_type:
-          type: string
-        created_at:
-          format: date-time
-          type: string
-        updated_at:
-          format: date-time
-          type: string
-      required:
-      - id
-      - name
-      type: object
-    StoreCreate:
-      example:
-        name: Miguels Conbini
-        store_type: CONVENIENCE_STORE
-      properties:
-        name:
-          type: string
-        store_type:
-          type: string
-      required:
-      - name
-      type: object
-    Store:
-      example:
-        name: Miguels Conbini
-        id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-        store_type: CONVENIENCE_STORE
-        created_at: 2022-07-21T02:05:41.527664Z
-        updated_at: 2022-07-21T02:05:41.527664Z
-      properties:
-        id:
-          format: uuid
-          type: string
-        name:
-          type: string
-        store_type:
-          type: string
-        created_at:
-          format: date-time
-          type: string
-        updated_at:
-          format: date-time
-          type: string
-      required:
-      - id
-      - name
       type: object
     UserCreate:
       example:
@@ -268,6 +322,111 @@ components:
           format: date-time
           type: string
       required:
+      - name
+      type: object
+    StoreUpdate:
+      example:
+        name: Miguel Conbini
+        store_type: CONVENIENCE_STORE
+      properties:
+        name:
+          example: Miguel Conbini
+          type: string
+        store_type:
+          example: CONVENIENCE_STORE
+          type: string
+      type: object
+    StoreCreate:
+      example:
+        name: Miguels Conbini
+        store_type: CONVENIENCE_STORE
+      properties:
+        name:
+          type: string
+        store_type:
+          type: string
+      required:
+      - name
+      - store_type
+      type: object
+    Store:
+      example:
+        name: Miguels Conbini
+        id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        store_type: CONVENIENCE_STORE
+        created_at: 2022-07-21T02:05:41.527664Z
+        updated_at: 2022-07-21T02:05:41.527664Z
+      properties:
+        id:
+          format: uuid
+          type: string
+        name:
+          type: string
+        store_type:
+          type: string
+        created_at:
+          format: date-time
+          type: string
+        updated_at:
+          format: date-time
+          type: string
+      required:
+      - created_at
       - id
       - name
+      - store_type
+      - updated_at
+      type: object
+    SupplierUpdate:
+      example:
+        name: Ricardo Meat
+        product_type: MEAT
+      properties:
+        name:
+          example: Ricardo Meat
+          type: string
+        product_type:
+          example: MEAT
+          type: string
+      type: object
+    SupplierCreate:
+      example:
+        name: Ricardo Meat
+        product_type: MEAT
+      properties:
+        name:
+          type: string
+        product_type:
+          type: string
+      required:
+      - name
+      - product_type
+      type: object
+    Supplier:
+      example:
+        id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        name: Ricardo's Meat
+        product_type: MEAT
+        created_at: 2022-07-21T02:05:41.527664Z
+        updated_at: 2022-07-21T02:05:41.527664Z
+      properties:
+        id:
+          format: uuid
+          type: string
+        name:
+          type: string
+        product_type:
+          type: string
+        created_at:
+          format: date-time
+          type: string
+        updated_at:
+          format: date-time
+          type: string
+      required:
+      - created_at
+      - id
+      - name
+      - product_type
+      - updated_at
       type: object

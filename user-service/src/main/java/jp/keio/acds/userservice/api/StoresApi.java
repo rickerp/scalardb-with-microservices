@@ -7,6 +7,7 @@ package jp.keio.acds.userservice.api;
 
 import jp.keio.acds.userservice.dto.Store;
 import jp.keio.acds.userservice.dto.StoreCreate;
+import jp.keio.acds.userservice.dto.StoreUpdate;
 import java.util.UUID;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -31,7 +32,7 @@ import java.util.Map;
 import java.util.Optional;
 import javax.annotation.Generated;
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2022-07-21T11:41:32.293+09:00[Asia/Tokyo]")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2022-07-21T12:01:45.170+09:00[Asia/Tokyo]")
 @Validated
 @Tag(name = "stores", description = "Store model")
 public interface StoresApi {
@@ -82,11 +83,40 @@ public interface StoresApi {
 
 
     /**
+     * DELETE /stores/{storeId} : Delete store by id
+     * Deletes a single store by id
+     *
+     * @param storeId ID of the store to delete (required)
+     * @return successfully deleted the store (status code 200)
+     *         or No store with the id was found (status code 404)
+     */
+    @Operation(
+        operationId = "deleteStore",
+        summary = "Delete store by id",
+        tags = { "stores" },
+        responses = {
+            @ApiResponse(responseCode = "200", description = "successfully deleted the store"),
+            @ApiResponse(responseCode = "404", description = "No store with the id was found")
+        }
+    )
+    @RequestMapping(
+        method = RequestMethod.DELETE,
+        value = "/stores/{storeId}"
+    )
+    default ResponseEntity<Void> deleteStore(
+        @Parameter(name = "storeId", description = "ID of the store to delete", required = true) @PathVariable("storeId") UUID storeId
+    ) {
+        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+
+    }
+
+
+    /**
      * GET /stores/{storeId} : Get store by id
      * Gets a single store by id
      *
      * @param storeId ID of store to return (required)
-     * @return successful listing of stores (status code 200)
+     * @return successfully got the store (status code 200)
      *         or store with id inputted not found (status code 404)
      */
     @Operation(
@@ -94,7 +124,7 @@ public interface StoresApi {
         summary = "Get store by id",
         tags = { "stores" },
         responses = {
-            @ApiResponse(responseCode = "200", description = "successful listing of stores", content = {
+            @ApiResponse(responseCode = "200", description = "successfully got the store", content = {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = Store.class))
             }),
             @ApiResponse(responseCode = "404", description = "store with id inputted not found")
@@ -145,6 +175,50 @@ public interface StoresApi {
     )
     default ResponseEntity<List<Store>> listStores(
         
+    ) {
+        getRequest().ifPresent(request -> {
+            for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
+                if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
+                    String exampleString = "{ \"name\" : \"Miguels Conbini\", \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\", \"store_type\" : \"CONVENIENCE_STORE\", \"created_at\" : \"2022-07-21T02:05:41.527664Z\", \"updated_at\" : \"2022-07-21T02:05:41.527664Z\" }";
+                    ApiUtil.setExampleResponse(request, "application/json", exampleString);
+                    break;
+                }
+            }
+        });
+        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+
+    }
+
+
+    /**
+     * PUT /stores/{storeId} : Update store by id
+     * Update a single store by id
+     *
+     * @param storeId ID of the store to update (required)
+     * @param storeUpdate Store fields to update (required)
+     * @return successfully updated the store (status code 200)
+     *         or No store with the id was found (status code 404)
+     */
+    @Operation(
+        operationId = "updateStore",
+        summary = "Update store by id",
+        tags = { "stores" },
+        responses = {
+            @ApiResponse(responseCode = "200", description = "successfully updated the store", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = Store.class))
+            }),
+            @ApiResponse(responseCode = "404", description = "No store with the id was found")
+        }
+    )
+    @RequestMapping(
+        method = RequestMethod.PUT,
+        value = "/stores/{storeId}",
+        produces = { "application/json" },
+        consumes = { "application/json" }
+    )
+    default ResponseEntity<Store> updateStore(
+        @Parameter(name = "storeId", description = "ID of the store to update", required = true) @PathVariable("storeId") UUID storeId,
+        @Parameter(name = "StoreUpdate", description = "Store fields to update", required = true) @Valid @RequestBody StoreUpdate storeUpdate
     ) {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {

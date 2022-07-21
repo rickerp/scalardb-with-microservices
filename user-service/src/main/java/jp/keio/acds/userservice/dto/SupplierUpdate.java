@@ -15,16 +15,19 @@ import java.util.*;
 import javax.annotation.Generated;
 
 /**
- * UserCreate
+ * SupplierUpdate
  */
 
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2022-07-21T12:01:45.170+09:00[Asia/Tokyo]")
-public class UserCreate {
+public class SupplierUpdate {
 
   @JsonProperty("name")
   private String name;
 
-  public UserCreate name(String name) {
+  @JsonProperty("product_type")
+  private String productType;
+
+  public SupplierUpdate name(String name) {
     this.name = name;
     return this;
   }
@@ -33,14 +36,33 @@ public class UserCreate {
    * Get name
    * @return name
   */
-  @NotNull 
-  @Schema(name = "name", example = "Org", required = true)
+  
+  @Schema(name = "name", example = "Ricardo Meat", required = false)
   public String getName() {
     return name;
   }
 
   public void setName(String name) {
     this.name = name;
+  }
+
+  public SupplierUpdate productType(String productType) {
+    this.productType = productType;
+    return this;
+  }
+
+  /**
+   * Get productType
+   * @return productType
+  */
+  
+  @Schema(name = "product_type", example = "MEAT", required = false)
+  public String getProductType() {
+    return productType;
+  }
+
+  public void setProductType(String productType) {
+    this.productType = productType;
   }
 
   @Override
@@ -51,20 +73,22 @@ public class UserCreate {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    UserCreate userCreate = (UserCreate) o;
-    return Objects.equals(this.name, userCreate.name);
+    SupplierUpdate supplierUpdate = (SupplierUpdate) o;
+    return Objects.equals(this.name, supplierUpdate.name) &&
+        Objects.equals(this.productType, supplierUpdate.productType);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(name);
+    return Objects.hash(name, productType);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class UserCreate {\n");
+    sb.append("class SupplierUpdate {\n");
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
+    sb.append("    productType: ").append(toIndentedString(productType)).append("\n");
     sb.append("}");
     return sb.toString();
   }

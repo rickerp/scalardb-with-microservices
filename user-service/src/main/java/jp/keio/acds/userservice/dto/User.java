@@ -21,7 +21,7 @@ import javax.annotation.Generated;
  * User
  */
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2022-07-21T11:41:32.293+09:00[Asia/Tokyo]")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2022-07-21T12:01:45.170+09:00[Asia/Tokyo]")
 public class User {
 
   @JsonProperty("id")
@@ -47,8 +47,8 @@ public class User {
    * Get id
    * @return id
   */
-  @NotNull @Valid 
-  @Schema(name = "id", required = true)
+  @Valid 
+  @Schema(name = "id", required = false)
   public UUID getId() {
     return id;
   }

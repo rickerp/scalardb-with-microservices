@@ -3,6 +3,7 @@ package jp.keio.acds.userservice.api;
 import com.scalar.db.exception.transaction.TransactionException;
 import jp.keio.acds.userservice.dto.Store;
 import jp.keio.acds.userservice.dto.StoreCreate;
+import jp.keio.acds.userservice.dto.StoreUpdate;
 import jp.keio.acds.userservice.service.StoreService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -58,6 +59,15 @@ public class StoresApiController implements StoresApi {
     public ResponseEntity<Store> createStore(StoreCreate body) {
         try {
             return new ResponseEntity(storeService.create(body), HttpStatus.OK);
+        } catch (TransactionException e) {
+            return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @Override
+    public ResponseEntity<Store> updateStore(UUID storeId, StoreUpdate body) {
+        try {
+            return new ResponseEntity(storeService.update(body), HttpStatus.OK);
         } catch (TransactionException e) {
             return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
         }

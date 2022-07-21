@@ -18,7 +18,7 @@ import javax.annotation.Generated;
  * StoreCreate
  */
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2022-07-21T11:41:32.293+09:00[Asia/Tokyo]")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2022-07-21T12:01:45.170+09:00[Asia/Tokyo]")
 public class StoreCreate {
 
   @JsonProperty("name")
@@ -55,8 +55,8 @@ public class StoreCreate {
    * Get storeType
    * @return storeType
   */
-  
-  @Schema(name = "store_type", required = false)
+  @NotNull 
+  @Schema(name = "store_type", required = true)
   public String getStoreType() {
     return storeType;
   }

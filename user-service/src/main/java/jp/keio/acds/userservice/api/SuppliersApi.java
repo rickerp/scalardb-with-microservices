@@ -7,6 +7,7 @@ package jp.keio.acds.userservice.api;
 
 import jp.keio.acds.userservice.dto.Supplier;
 import jp.keio.acds.userservice.dto.SupplierCreate;
+import jp.keio.acds.userservice.dto.SupplierUpdate;
 import java.util.UUID;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -31,7 +32,7 @@ import java.util.Map;
 import java.util.Optional;
 import javax.annotation.Generated;
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2022-07-21T11:41:32.293+09:00[Asia/Tokyo]")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2022-07-21T12:01:45.170+09:00[Asia/Tokyo]")
 @Validated
 @Tag(name = "suppliers", description = "Supplier model")
 public interface SuppliersApi {
@@ -76,6 +77,35 @@ public interface SuppliersApi {
                 }
             }
         });
+        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+
+    }
+
+
+    /**
+     * DELETE /suppliers/{supplierId} : Delete supplier by id
+     * Deletes a single supplier by id
+     *
+     * @param supplierId ID of the supplier to delete (required)
+     * @return successfully deleted the supplier (status code 200)
+     *         or No supplier with the id was found (status code 404)
+     */
+    @Operation(
+        operationId = "deleteSupplier",
+        summary = "Delete supplier by id",
+        tags = { "suppliers" },
+        responses = {
+            @ApiResponse(responseCode = "200", description = "successfully deleted the supplier"),
+            @ApiResponse(responseCode = "404", description = "No supplier with the id was found")
+        }
+    )
+    @RequestMapping(
+        method = RequestMethod.DELETE,
+        value = "/suppliers/{supplierId}"
+    )
+    default ResponseEntity<Void> deleteSupplier(
+        @Parameter(name = "supplierId", description = "ID of the supplier to delete", required = true) @PathVariable("supplierId") UUID supplierId
+    ) {
         return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
 
     }
@@ -145,6 +175,50 @@ public interface SuppliersApi {
     )
     default ResponseEntity<List<Supplier>> listSuppliers(
         
+    ) {
+        getRequest().ifPresent(request -> {
+            for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
+                if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
+                    String exampleString = "{ \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\", \"name\" : \"Ricardo's Meat\", \"product_type\" : \"MEAT\", \"created_at\" : \"2022-07-21T02:05:41.527664Z\", \"updated_at\" : \"2022-07-21T02:05:41.527664Z\" }";
+                    ApiUtil.setExampleResponse(request, "application/json", exampleString);
+                    break;
+                }
+            }
+        });
+        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+
+    }
+
+
+    /**
+     * PUT /suppliers/{supplierId} : Update supplier by id
+     * Update a single supplier by id
+     *
+     * @param supplierId ID of the supplier to update (required)
+     * @param supplierUpdate Supplier fields to update (required)
+     * @return successfully updated the supplier (status code 200)
+     *         or No supplier with the id was found (status code 404)
+     */
+    @Operation(
+        operationId = "updateSupplier",
+        summary = "Update supplier by id",
+        tags = { "suppliers" },
+        responses = {
+            @ApiResponse(responseCode = "200", description = "successfully updated the supplier", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = Supplier.class))
+            }),
+            @ApiResponse(responseCode = "404", description = "No supplier with the id was found")
+        }
+    )
+    @RequestMapping(
+        method = RequestMethod.PUT,
+        value = "/suppliers/{supplierId}",
+        produces = { "application/json" },
+        consumes = { "application/json" }
+    )
+    default ResponseEntity<Supplier> updateSupplier(
+        @Parameter(name = "supplierId", description = "ID of the supplier to update", required = true) @PathVariable("supplierId") UUID supplierId,
+        @Parameter(name = "SupplierUpdate", description = "Supplier fields to update", required = true) @Valid @RequestBody SupplierUpdate supplierUpdate
     ) {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
