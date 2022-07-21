@@ -11,9 +11,6 @@ import lombok.Getter;
 @Builder
 @JsonDeserialize(builder = CreateOrderDto.CreateOrderDtoBuilder.class)
 public class CreateOrderDto {
-    @JsonProperty("from_id")
-    String fromId;
-
     @JsonProperty("to_id")
     String toId;
 

@@ -3,6 +3,7 @@ package jp.keio.acds.orderservice.repository;
 import com.scalar.db.api.DistributedTransaction;
 import com.scalar.db.api.Put;
 import com.scalar.db.api.Result;
+import com.scalar.db.api.TwoPhaseCommitTransaction;
 import com.scalar.db.exception.transaction.*;
 import com.scalar.db.io.Key;
 import jp.keio.acds.orderservice.dto.GetOrderDto;
@@ -23,7 +24,7 @@ public class OrderRepository extends BaseRepository<GetOrderDto> {
     private static final String TIMESTAMP = "timestamp";
 
 
-    public String createOrder(DistributedTransaction tx, String fromID, String toId) throws CrudException {
+    public String createOrder(TwoPhaseCommitTransaction tx, String fromID, String toId) throws CrudException {
         String orderId = UUID.randomUUID().toString();
 
         Put put = Put.newBuilder()

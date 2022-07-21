@@ -2,6 +2,7 @@ package jp.keio.acds.orderservice.service;
 
 import com.scalar.db.api.DistributedTransaction;
 import com.scalar.db.api.DistributedTransactionManager;
+import com.scalar.db.api.TwoPhaseCommitTransactionManager;
 import jp.keio.acds.orderservice.dto.CreateProductDto;
 import jp.keio.acds.orderservice.dto.GetProductDto;
 import jp.keio.acds.orderservice.exception.InternalServerErrorException;
@@ -20,13 +21,14 @@ public class ProductService extends BaseService {
 
     @Autowired
     public ProductService(ProductRepository productRepository,
-                          DistributedTransactionManager manager) {
-        super(manager);
+                          DistributedTransactionManager manager,
+                          TwoPhaseCommitTransactionManager microserviceManager) {
+        super(manager, microserviceManager);
         this.productRepository = productRepository;
     }
 
     public String createProduct(CreateProductDto createProductDto) throws InterruptedException {
-        return execute(tx -> {
+        return execute((Transaction<String>) tx -> {
             String productId = productRepository.createProduct(tx, createProductDto);
             tx.commit();
             return productId;
@@ -34,7 +36,7 @@ public class ProductService extends BaseService {
     }
 
     public GetProductDto getProduct(String productId) throws InterruptedException {
-        return execute(tx -> {
+        return execute((Transaction<GetProductDto>) tx -> {
             GetProductDto getProductDto = productRepository.getProduct(tx, productId);
             tx.commit();
             return getProductDto;
@@ -42,7 +44,7 @@ public class ProductService extends BaseService {
     }
 
     public List<GetProductDto> listProducts() throws InterruptedException {
-        return execute(tx -> {
+        return execute((Transaction<List<GetProductDto>>) tx -> {
             List<GetProductDto> getProductDtoList = productRepository.listProducts(tx);
             tx.commit();
             return getProductDtoList;

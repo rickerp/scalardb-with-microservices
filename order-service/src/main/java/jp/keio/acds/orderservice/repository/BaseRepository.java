@@ -1,9 +1,6 @@
 package jp.keio.acds.orderservice.repository;
 
-import com.scalar.db.api.DistributedTransaction;
-import com.scalar.db.api.Get;
-import com.scalar.db.api.Result;
-import com.scalar.db.api.Scan;
+import com.scalar.db.api.*;
 import com.scalar.db.exception.transaction.CrudException;
 import com.scalar.db.io.Key;
 import jp.keio.acds.orderservice.exception.NotFoundException;
@@ -13,7 +10,7 @@ import java.util.stream.Collectors;
 
 public abstract class BaseRepository<T> {
 
-    public T get(DistributedTransaction tx, String id) throws CrudException, NotFoundException {
+    public T get(TransactionCrudOperable tx, String id) throws CrudException, NotFoundException {
         return toDto(tx.get(getQuery(id)).orElseThrow(() -> new NotFoundException(id)));
     }
 

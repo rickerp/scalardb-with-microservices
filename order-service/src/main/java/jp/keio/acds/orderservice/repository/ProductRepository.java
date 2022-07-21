@@ -3,6 +3,7 @@ package jp.keio.acds.orderservice.repository;
 import com.scalar.db.api.DistributedTransaction;
 import com.scalar.db.api.Put;
 import com.scalar.db.api.Result;
+import com.scalar.db.api.TransactionCrudOperable;
 import com.scalar.db.exception.transaction.CrudException;
 import com.scalar.db.io.Key;
 import jp.keio.acds.orderservice.dto.CreateProductDto;
@@ -39,7 +40,7 @@ public class ProductRepository extends BaseRepository<GetProductDto> {
         return productId;
     }
 
-    public GetProductDto getProduct(DistributedTransaction tx, String productId) throws CrudException {
+    public GetProductDto getProduct(TransactionCrudOperable tx, String productId) throws CrudException {
         return get(tx, productId);
     }
 

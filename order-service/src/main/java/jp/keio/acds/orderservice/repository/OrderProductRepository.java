@@ -3,14 +3,11 @@ package jp.keio.acds.orderservice.repository;
 import com.scalar.db.api.DistributedTransaction;
 import com.scalar.db.api.Put;
 import com.scalar.db.api.Result;
+import com.scalar.db.api.TwoPhaseCommitTransaction;
 import com.scalar.db.exception.transaction.CrudException;
 import com.scalar.db.io.Key;
 import jp.keio.acds.orderservice.dto.GetOrderProductDto;
-import jp.keio.acds.orderservice.exception.NotFoundException;
 import org.springframework.stereotype.Repository;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Repository
 public class OrderProductRepository extends BaseRepository<GetOrderProductDto> {
@@ -22,7 +19,7 @@ public class OrderProductRepository extends BaseRepository<GetOrderProductDto> {
     private static final String COUNT = "count";
 
 
-    public void createOrderProduct(DistributedTransaction tx, String orderId, String productId, Integer count)
+    public void createOrderProduct(TwoPhaseCommitTransaction tx, String orderId, String productId, Integer count)
             throws CrudException {
         Put put = Put.newBuilder()
                 .namespace(NAMESPACE)
