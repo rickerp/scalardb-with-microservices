@@ -3,11 +3,13 @@ package jp.keio.acds.userservice.api;
 import jp.keio.acds.userservice.dto.Store;
 import jp.keio.acds.userservice.dto.StoreCreate;
 import jp.keio.acds.userservice.dto.StoreUpdate;
+import jp.keio.acds.userservice.dto.TransactionUpdate;
 import jp.keio.acds.userservice.service.StoreService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.context.request.NativeWebRequest;
 
@@ -59,6 +61,12 @@ public class StoresApiController implements StoresApi {
     @Override
     public ResponseEntity<Void> deleteStore(UUID storeId) {
         storeService.deleteStore(storeId);
+        return new ResponseEntity(HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<Void> registerOrder(String storeId, TransactionUpdate transactionUpdate) {
+        transactionUpdate.getTransactionId();
         return new ResponseEntity(HttpStatus.OK);
     }
 }

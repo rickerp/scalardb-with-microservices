@@ -15,54 +15,32 @@ import java.util.*;
 import javax.annotation.Generated;
 
 /**
- * StoreCreate
+ * TransactionUpdate
  */
 
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2022-07-22T02:41:53.804+09:00[Asia/Tokyo]")
-public class StoreCreate {
+public class TransactionUpdate {
 
-  @JsonProperty("name")
-  private String name;
+  @JsonProperty("transaction_id")
+  private String transactionId;
 
-  @JsonProperty("store_type")
-  private String storeType;
-
-  public StoreCreate name(String name) {
-    this.name = name;
+  public TransactionUpdate transactionId(String transactionId) {
+    this.transactionId = transactionId;
     return this;
   }
 
   /**
-   * Get name
-   * @return name
+   * Get transactionId
+   * @return transactionId
   */
   @NotNull 
-  @Schema(name = "name", required = true)
-  public String getName() {
-    return name;
+  @Schema(name = "transaction_id", example = "046b6c7f-0b8a-43b9-b35d-6489e6daee91", required = true)
+  public String getTransactionId() {
+    return transactionId;
   }
 
-  public void setName(String name) {
-    this.name = name;
-  }
-
-  public StoreCreate storeType(String storeType) {
-    this.storeType = storeType;
-    return this;
-  }
-
-  /**
-   * Get storeType
-   * @return storeType
-  */
-  @NotNull 
-  @Schema(name = "store_type", required = true)
-  public String getStoreType() {
-    return storeType;
-  }
-
-  public void setStoreType(String storeType) {
-    this.storeType = storeType;
+  public void setTransactionId(String transactionId) {
+    this.transactionId = transactionId;
   }
 
   @Override
@@ -73,22 +51,20 @@ public class StoreCreate {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    StoreCreate storeCreate = (StoreCreate) o;
-    return Objects.equals(this.name, storeCreate.name) &&
-        Objects.equals(this.storeType, storeCreate.storeType);
+    TransactionUpdate transactionUpdate = (TransactionUpdate) o;
+    return Objects.equals(this.transactionId, transactionUpdate.transactionId);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(name, storeType);
+    return Objects.hash(transactionId);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class StoreCreate {\n");
-    sb.append("    name: ").append(toIndentedString(name)).append("\n");
-    sb.append("    storeType: ").append(toIndentedString(storeType)).append("\n");
+    sb.append("class TransactionUpdate {\n");
+    sb.append("    transactionId: ").append(toIndentedString(transactionId)).append("\n");
     sb.append("}");
     return sb.toString();
   }

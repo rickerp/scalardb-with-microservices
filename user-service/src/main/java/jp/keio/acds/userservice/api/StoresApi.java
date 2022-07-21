@@ -8,6 +8,7 @@ package jp.keio.acds.userservice.api;
 import jp.keio.acds.userservice.dto.Store;
 import jp.keio.acds.userservice.dto.StoreCreate;
 import jp.keio.acds.userservice.dto.StoreUpdate;
+import jp.keio.acds.userservice.dto.TransactionUpdate;
 import java.util.UUID;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -32,7 +33,7 @@ import java.util.Map;
 import java.util.Optional;
 import javax.annotation.Generated;
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2022-07-21T12:01:45.170+09:00[Asia/Tokyo]")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2022-07-22T02:41:53.804+09:00[Asia/Tokyo]")
 @Validated
 @Tag(name = "stores", description = "Store model")
 public interface StoresApi {
@@ -185,6 +186,36 @@ public interface StoresApi {
                 }
             }
         });
+        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+
+    }
+
+
+    /**
+     * PUT /stores/{storeId}/registerOrder : Register order by id
+     * Register order
+     *
+     * @param storeId ID of store (required)
+     * @param transactionUpdate Store fields to update (required)
+     * @return successfully registered order (status code 200)
+     */
+    @Operation(
+        operationId = "registerOrder",
+        summary = "Register order by id",
+        tags = { "stores" },
+        responses = {
+            @ApiResponse(responseCode = "200", description = "successfully registered order")
+        }
+    )
+    @RequestMapping(
+        method = RequestMethod.PUT,
+        value = "/stores/{storeId}/registerOrder",
+        consumes = { "application/json" }
+    )
+    default ResponseEntity<Void> registerOrder(
+        @Parameter(name = "storeId", description = "ID of store", required = true) @PathVariable("storeId") String storeId,
+        @Parameter(name = "TransactionUpdate", description = "Store fields to update", required = true) @Valid @RequestBody TransactionUpdate transactionUpdate
+    ) {
         return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
 
     }

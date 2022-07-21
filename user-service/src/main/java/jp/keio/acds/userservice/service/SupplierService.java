@@ -11,7 +11,7 @@ public class SupplierService extends BaseService {
     private static final SupplierRepository supplierRepo = new SupplierRepository();
 
     public Supplier get(UUID supplierId) {
-        return this.execute(tx -> supplierRepo.get(tx, supplierId), null);
+        return this.execute((Transaction<Supplier>) tx -> supplierRepo.get(tx, supplierId), null);
     }
 
     public Supplier[] list() {
@@ -19,7 +19,7 @@ public class SupplierService extends BaseService {
     }
 
     public Supplier create(SupplierCreate supplierIn) {
-        return this.execute(tx -> {
+        return this.execute((Transaction<Supplier>) tx -> {
             Supplier supplier = supplierRepo.create(tx, supplierIn);
             tx.commit();
             return supplier;

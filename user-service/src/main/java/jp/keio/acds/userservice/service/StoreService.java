@@ -11,7 +11,7 @@ public class StoreService extends BaseService {
     private static final StoreRepository storeRepo = new StoreRepository();
 
     public Store get(UUID storeId) {
-        return this.execute(tx -> storeRepo.getStore(tx, storeId), null);
+        return this.execute((Transaction<Store>) tx -> storeRepo.getStore(tx, storeId), null);
     }
 
     public Store[] listStores() {
@@ -19,7 +19,7 @@ public class StoreService extends BaseService {
     }
 
     public Store createStore(StoreCreate storeIn) {
-        return this.execute(tx -> {
+        return this.execute((Transaction<Store>) tx -> {
             Store store = storeRepo.createStore(tx, storeIn);
             tx.commit();
             return store;
@@ -27,7 +27,7 @@ public class StoreService extends BaseService {
     }
 
     public Store updateStore(UUID storeId, StoreUpdate storeIn) {
-        return this.execute(tx -> {
+        return this.execute((Transaction<Store>) tx -> {
             Store store = storeRepo.updateStore(tx, storeId, storeIn);
             tx.commit();
             return store;
@@ -35,7 +35,7 @@ public class StoreService extends BaseService {
     }
 
     public void deleteStore(UUID storeId) {
-        this.execute(tx -> {
+        this.execute((Transaction<Object>) tx -> {
             storeRepo.deleteStore(tx, storeId);
             tx.commit();
             return null;

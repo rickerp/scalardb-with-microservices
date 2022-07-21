@@ -6,6 +6,8 @@ info:
 servers:
 - url: /
 tags:
+- description: Scalar DB api
+  name: scalardb
 - description: User model
   name: users
 - description: Store model
@@ -13,6 +15,98 @@ tags:
 - description: Supplier model
   name: suppliers
 paths:
+  /scalardb/join/{transactionId}:
+    get:
+      description: Transactional Join
+      operationId: join
+      parameters:
+      - description: Transaction Id
+        explode: false
+        in: path
+        name: transactionId
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      responses:
+        "200":
+          description: successfully joined
+      summary: Joins transaction
+      tags:
+      - scalardb
+      x-accepts: application/json
+      x-tags:
+      - tag: scalardb
+  /scalardb/prepare/{transactionId}:
+    get:
+      description: Transactional Prepare
+      operationId: prepare
+      parameters:
+      - description: Transaction Id
+        explode: false
+        in: path
+        name: transactionId
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      responses:
+        "200":
+          description: successfully prepared
+      summary: Prepares transaction
+      tags:
+      - scalardb
+      x-accepts: application/json
+      x-tags:
+      - tag: scalardb
+  /scalardb/rollback/{transactionId}:
+    get:
+      description: Transactional Rollback
+      operationId: rollback
+      parameters:
+      - description: Transaction Id
+        explode: false
+        in: path
+        name: transactionId
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      responses:
+        "200":
+          description: successfully rolled back
+      summary: Rollbacks transaction
+      tags:
+      - scalardb
+      x-accepts: application/json
+      x-tags:
+      - tag: scalardb
+  /scalardb/commit/{transactionId}:
+    get:
+      description: Transactional Commit
+      operationId: commit
+      parameters:
+      - description: Transaction Id
+        explode: false
+        in: path
+        name: transactionId
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      responses:
+        "200":
+          description: successfully committed
+      summary: Commits transaction
+      tags:
+      - scalardb
+      x-accepts: application/json
+      x-tags:
+      - tag: scalardb
   /stores:
     get:
       description: Returns a list of stores
@@ -142,6 +236,36 @@ paths:
         "404":
           description: No store with the id was found
       summary: Update store by id
+      tags:
+      - stores
+      x-accepts: application/json
+      x-tags:
+      - tag: stores
+      x-content-type: application/json
+  /stores/{storeId}/registerOrder:
+    put:
+      description: Register order
+      operationId: registerOrder
+      parameters:
+      - description: ID of store
+        explode: false
+        in: path
+        name: storeId
+        required: true
+        schema:
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TransactionUpdate'
+        description: Store fields to update
+        required: true
+      responses:
+        "200":
+          description: successfully registered order
+      summary: Register order by id
       tags:
       - stores
       x-accepts: application/json
@@ -285,6 +409,16 @@ paths:
       x-content-type: application/json
 components:
   schemas:
+    TransactionUpdate:
+      example:
+        transaction_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+      properties:
+        transaction_id:
+          example: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          type: string
+      required:
+      - transaction_id
+      type: object
     UserUpdate:
       example:
         name: Org

@@ -17,10 +17,10 @@ public abstract class BaseService {
 
     private static final int MAX_TRANSACTION_RETRIES = 3;
 
-    private static final String JOIN_URI = "/api/join/";
-    private static final String PREPARE_URI = "/api/prepare/";
-    private static final String COMMIT_URI = "/api/commit/";
-    private static final String ROLLBACK_URI = "/api/rollback/";
+    private static final String JOIN_URI = "/scalardb/join/";
+    private static final String PREPARE_URI = "/scalardb/prepare/";
+    private static final String COMMIT_URI = "/scalardb/commit/";
+    private static final String ROLLBACK_URI = "/scalardb/rollback/";
 
     private final DistributedTransactionManager manager;
 
@@ -41,7 +41,8 @@ public abstract class BaseService {
             try {
                 return transaction.execute(tx);
             } catch (CommitConflictException | CrudConflictException e) {
-                retryTransaction(++retryCount);
+                if (!retryTransaction(++retryCount))
+                    throw new InternalServerErrorException("ERROR : Failed transaction after 3 retries");
             } catch (CommitException | CrudException | UnknownTransactionStatusException e) {
                 throw new InternalServerErrorException("ERROR : ScalarDB error", e);
             } finally {
@@ -59,11 +60,13 @@ public abstract class BaseService {
             try {
                 return transaction.execute(tx);
             } catch (CommitConflictException | CrudConflictException | PreparationConflictException e) {
-                retryTransaction(++retryCount);
+                if (!retryTransaction(++retryCount)) {
+                    rollbackTransaction(tx, client);
+                    throw new InternalServerErrorException("ERROR : Failed transaction after 3 retries");
+                }
             } catch (CommitException | CrudException | PreparationException | UnknownTransactionStatusException e) {
+                rollbackTransaction(tx, client);
                 throw new InternalServerErrorException("ERROR : ScalarDB error", e);
-            } finally {
-                rollbackMicroserviceTransaction(tx, client);
             }
         }
     }
@@ -84,11 +87,13 @@ public abstract class BaseService {
         }
     }
 
-    private void retryTransaction(int retryCount) throws InterruptedException {
+    private boolean retryTransaction(int retryCount) throws InterruptedException {
         if (retryCount == MAX_TRANSACTION_RETRIES) {
-            throw new InternalServerErrorException("ERROR : Failed transaction after 3 retries");
+            return false;
+        } else {
+            TimeUnit.MILLISECONDS.sleep(100);
+            return true;
         }
-        TimeUnit.MILLISECONDS.sleep(100);
     }
 
     private void abortTransaction(DistributedTransaction tx) {
@@ -99,7 +104,18 @@ public abstract class BaseService {
         }
     }
 
-    private void rollbackMicroserviceTransaction(TwoPhaseCommitTransaction tx, WebClient client) {
+    public void prepareTransaction(TwoPhaseCommitTransaction tx, WebClient client) throws PreparationException {
+        tx.prepare();
+        sendPrepareRequest(tx.getId(), client);
+    }
+
+    public void commitTransaction(TwoPhaseCommitTransaction tx, WebClient client)
+            throws CommitException, UnknownTransactionStatusException {
+        tx.commit();
+        sendCommitRequest(tx.getId(), client);
+    }
+
+    public void rollbackTransaction(TwoPhaseCommitTransaction tx, WebClient client) {
         try {
             tx.rollback();
             sendRollbackRequest(tx.getId(), client);

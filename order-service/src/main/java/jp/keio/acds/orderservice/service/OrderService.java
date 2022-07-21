@@ -51,7 +51,7 @@ public class OrderService extends BaseService {
     }
 
     public String createOrder(CreateOrderDto createOrderDto) throws InterruptedException {
-        return execute((MicroserviceTransaction<String>) tx -> {
+        return execute(tx -> {
             String txId = tx.getId();
 
             sendJoinRequest(txId, userMicroserviceClient);
@@ -69,13 +69,11 @@ public class OrderService extends BaseService {
 
             sendRegisterOrderRequest(txId, createOrderDto.getToId());
 
-            tx.prepare();
-            sendPrepareRequest(txId, userMicroserviceClient);
+            prepareTransaction(tx, userMicroserviceClient);
+            commitTransaction(tx, userMicroserviceClient);
 
-            tx.commit();
-            sendCommitRequest(txId, userMicroserviceClient);
             return orderId;
-        }, null);
+        }, userMicroserviceClient);
     }
 
     public GetOrderDto getOrder(String orderId) throws InterruptedException {
