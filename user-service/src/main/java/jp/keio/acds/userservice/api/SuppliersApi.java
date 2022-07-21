@@ -31,7 +31,7 @@ import java.util.Map;
 import java.util.Optional;
 import javax.annotation.Generated;
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2022-07-21T11:23:14.446+09:00[Asia/Tokyo]")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2022-07-21T11:41:32.293+09:00[Asia/Tokyo]")
 @Validated
 @Tag(name = "suppliers", description = "Supplier model")
 public interface SuppliersApi {
@@ -50,7 +50,7 @@ public interface SuppliersApi {
     @Operation(
         operationId = "createSupplier",
         summary = "Create a new supplier",
-        tags = { "supplier" },
+        tags = { "suppliers" },
         responses = {
             @ApiResponse(responseCode = "200", description = "successful supplier creation", content = {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = Supplier.class))
@@ -92,7 +92,7 @@ public interface SuppliersApi {
     @Operation(
         operationId = "getSupplier",
         summary = "Get supplier by id",
-        tags = { "supplier" },
+        tags = { "suppliers" },
         responses = {
             @ApiResponse(responseCode = "200", description = "successful listing of suppliers", content = {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = Supplier.class))
@@ -131,7 +131,7 @@ public interface SuppliersApi {
     @Operation(
         operationId = "listSuppliers",
         summary = "List suppliers",
-        tags = { "supplier" },
+        tags = { "suppliers" },
         responses = {
             @ApiResponse(responseCode = "200", description = "successful operation", content = {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = Supplier.class))

@@ -5,7 +5,6 @@ src/main/java/jp/keio/acds/userservice/RFC3339DateFormat.java
 src/main/java/jp/keio/acds/userservice/api/ApiUtil.java
 src/main/java/jp/keio/acds/userservice/api/StoresApi.java
 src/main/java/jp/keio/acds/userservice/api/SuppliersApi.java
-src/main/java/jp/keio/acds/userservice/api/SuppliersApiController.java
 src/main/java/jp/keio/acds/userservice/configuration/HomeController.java
 src/main/java/jp/keio/acds/userservice/configuration/SpringDocConfiguration.java
 src/main/java/jp/keio/acds/userservice/dto/Store.java

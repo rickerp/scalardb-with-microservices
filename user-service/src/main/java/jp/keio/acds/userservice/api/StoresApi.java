@@ -31,7 +31,7 @@ import java.util.Map;
 import java.util.Optional;
 import javax.annotation.Generated;
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2022-07-21T11:23:14.446+09:00[Asia/Tokyo]")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2022-07-21T11:41:32.293+09:00[Asia/Tokyo]")
 @Validated
 @Tag(name = "stores", description = "Store model")
 public interface StoresApi {
@@ -50,7 +50,7 @@ public interface StoresApi {
     @Operation(
         operationId = "createStore",
         summary = "Create a new store",
-        tags = { "store" },
+        tags = { "stores" },
         responses = {
             @ApiResponse(responseCode = "200", description = "successful store creation", content = {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = Store.class))
@@ -92,7 +92,7 @@ public interface StoresApi {
     @Operation(
         operationId = "getStore",
         summary = "Get store by id",
-        tags = { "store" },
+        tags = { "stores" },
         responses = {
             @ApiResponse(responseCode = "200", description = "successful listing of stores", content = {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = Store.class))
@@ -131,7 +131,7 @@ public interface StoresApi {
     @Operation(
         operationId = "listStores",
         summary = "List stores",
-        tags = { "store" },
+        tags = { "stores" },
         responses = {
             @ApiResponse(responseCode = "200", description = "successful operation", content = {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = Store.class))
