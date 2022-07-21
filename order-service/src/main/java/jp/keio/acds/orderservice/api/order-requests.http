@@ -1,0 +1,59 @@
+###
+POST http://localhost:8080/api/orders
+Content-Type: application/json
+
+{
+  "from_id": "A",
+  "to_id": "C",
+  "order_products": [
+    {
+      "product_id": "845571a2-ab38-48ee-9cec-1b455f0f0bed",
+      "count": 2
+    }
+  ]
+}
+
+<> 2022-07-21T014840.201.txt
+<> 2022-07-21T000412.201.txt
+<> 2022-07-20T235700.500.json
+<> 2022-07-20T232215.500.json
+<> 2022-07-20T232019.400.json
+<> 2022-07-20T231850.400.json
+<> 2022-07-20T230516.500.json
+<> 2022-07-20T230219.500.json
+<> 2022-07-20T225840.500.json
+<> 2022-07-20T225239.500.json
+<> 2022-07-20T225031.500.json
+
+###
+GET http://localhost:8080/api/orders/dcd12673-6adc-4914-8748-477cfd1f68ae
+
+<> 2022-07-21T014851.200.json
+<> 2022-07-21T014100.500.json
+<> 2022-07-21T012856.400.json
+<> 2022-07-21T012839.400.json
+<> 2022-07-21T012740.400.json
+
+###
+GET http://localhost:8080/api/orders
+
+###
+DELETE http://localhost:8080/api/orders/dcd12673-6adc-4914-8748-477cfd1f68ae
+
+###
+POST http://localhost:8080/api/orders
+Content-Type: application/json
+
+{
+  "to_id": "C",
+  "order_products": [
+    {
+      "product_id": "845571a2-ab38-48ee-9cec-1b455f0f0bed",
+      "count": 5
+    },
+    {
+      "product_id": "397a950a-f65a-4db5-9f3e-de1a43ea3dd0",
+      "count": 2
+    }
+  ]
+}

@@ -1,3 +1,5 @@
+.DS_Store
+
 HELP.md
 .gradle
 build/
@@ -25,6 +27,21 @@ bin/
 out/
 !**/src/main/**/out/
 !**/src/test/**/out/
+
+### Eclipse IDEA ###
+.metadata
+tmp/
+*.tmp
+*.bak
+*.swp
+*~.nib
+local.properties
+.settings/
+.loadpath
+.recommenders
+.cache-main
+.scala_dependencies
+.worksheet
 
 ### NetBeans ###
 /nbproject/private/
