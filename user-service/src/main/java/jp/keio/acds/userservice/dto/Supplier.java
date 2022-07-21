@@ -18,17 +18,20 @@ import java.util.*;
 import javax.annotation.Generated;
 
 /**
- * User
+ * Supplier
  */
 
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2022-07-21T11:23:14.446+09:00[Asia/Tokyo]")
-public class User {
+public class Supplier {
 
   @JsonProperty("id")
   private UUID id;
 
   @JsonProperty("name")
   private String name;
+
+  @JsonProperty("product_type")
+  private String productType;
 
   @JsonProperty("created_at")
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
@@ -38,7 +41,7 @@ public class User {
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
   private OffsetDateTime updatedAt;
 
-  public User id(UUID id) {
+  public Supplier id(UUID id) {
     this.id = id;
     return this;
   }
@@ -57,7 +60,7 @@ public class User {
     this.id = id;
   }
 
-  public User name(String name) {
+  public Supplier name(String name) {
     this.name = name;
     return this;
   }
@@ -76,7 +79,26 @@ public class User {
     this.name = name;
   }
 
-  public User createdAt(OffsetDateTime createdAt) {
+  public Supplier productType(String productType) {
+    this.productType = productType;
+    return this;
+  }
+
+  /**
+   * Get productType
+   * @return productType
+  */
+  
+  @Schema(name = "product_type", required = false)
+  public String getProductType() {
+    return productType;
+  }
+
+  public void setProductType(String productType) {
+    this.productType = productType;
+  }
+
+  public Supplier createdAt(OffsetDateTime createdAt) {
     this.createdAt = createdAt;
     return this;
   }
@@ -95,7 +117,7 @@ public class User {
     this.createdAt = createdAt;
   }
 
-  public User updatedAt(OffsetDateTime updatedAt) {
+  public Supplier updatedAt(OffsetDateTime updatedAt) {
     this.updatedAt = updatedAt;
     return this;
   }
@@ -122,24 +144,26 @@ public class User {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    User user = (User) o;
-    return Objects.equals(this.id, user.id) &&
-        Objects.equals(this.name, user.name) &&
-        Objects.equals(this.createdAt, user.createdAt) &&
-        Objects.equals(this.updatedAt, user.updatedAt);
+    Supplier supplier = (Supplier) o;
+    return Objects.equals(this.id, supplier.id) &&
+        Objects.equals(this.name, supplier.name) &&
+        Objects.equals(this.productType, supplier.productType) &&
+        Objects.equals(this.createdAt, supplier.createdAt) &&
+        Objects.equals(this.updatedAt, supplier.updatedAt);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, name, createdAt, updatedAt);
+    return Objects.hash(id, name, productType, createdAt, updatedAt);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class User {\n");
+    sb.append("class Supplier {\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
+    sb.append("    productType: ").append(toIndentedString(productType)).append("\n");
     sb.append("    createdAt: ").append(toIndentedString(createdAt)).append("\n");
     sb.append("    updatedAt: ").append(toIndentedString(updatedAt)).append("\n");
     sb.append("}");

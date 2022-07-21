@@ -7,11 +7,11 @@ servers:
 - url: /
 tags:
 - description: User model
-  name: user
+  name: users
 - description: Store model
-  name: store
+  name: stores
 - description: Supplier model
-  name: supplier
+  name: suppliers
 paths:
   /stores:
     get:
@@ -28,10 +28,10 @@ paths:
           description: successful operation
       summary: List stores
       tags:
-      - store
+      - stores
       x-accepts: application/json
       x-tags:
-      - tag: store
+      - tag: stores
     post:
       operationId: createStore
       requestBody:
@@ -53,12 +53,12 @@ paths:
           description: Invalid input
       summary: Create a new store
       tags:
-      - store
+      - stores
       x-codegen-request-body-name: body
       x-content-type: application/json
       x-accepts: application/json
       x-tags:
-      - tag: store
+      - tag: stores
   /stores/{storeId}:
     get:
       description: Gets a single store by id
@@ -84,21 +84,132 @@ paths:
           description: store with id inputted not found
       summary: Get store by id
       tags:
-      - store
+      - stores
       x-accepts: application/json
       x-tags:
-      - tag: store
+      - tag: stores
+  /suppliers:
+    get:
+      description: Returns a list of suppliers
+      operationId: listSuppliers
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Supplier'
+                type: array
+          description: successful operation
+      summary: List suppliers
+      tags:
+      - suppliers
+      x-accepts: application/json
+      x-tags:
+      - tag: suppliers
+    post:
+      operationId: createSupplier
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SupplierCreate'
+        description: Supplier fields
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Supplier'
+          description: successful supplier creation
+        "400":
+          content: {}
+          description: Invalid input
+      summary: Create a new supplier
+      tags:
+      - suppliers
+      x-codegen-request-body-name: body
+      x-content-type: application/json
+      x-accepts: application/json
+      x-tags:
+      - tag: suppliers
+  /suppliers/{supplierId}:
+    get:
+      description: Gets a single supplier by id
+      operationId: getSupplier
+      parameters:
+      - description: ID of supplier to return
+        explode: false
+        in: path
+        name: supplierId
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Supplier'
+          description: successful listing of suppliers
+        "404":
+          description: supplier with id inputted not found
+      summary: Get supplier by id
+      tags:
+      - suppliers
+      x-accepts: application/json
+      x-tags:
+      - tag: suppliers
 components:
   schemas:
+    SupplierCreate:
+      example:
+        name: Ricardo's Meat
+        product_type: MEAT
+      properties:
+        name:
+          type: string
+        product_type:
+          type: string
+      required:
+      - name
+      type: object
+    Supplier:
+      example:
+        id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        name: Ricardo's Meat
+        product_type: MEAT
+        created_at: 2022-07-21T02:05:41.527664Z
+        updated_at: 2022-07-21T02:05:41.527664Z
+      properties:
+        id:
+          format: uuid
+          type: string
+        name:
+          type: string
+        product_type:
+          type: string
+        created_at:
+          format: date-time
+          type: string
+        updated_at:
+          format: date-time
+          type: string
+      required:
+      - id
+      - name
+      type: object
     StoreCreate:
       example:
         name: Miguels Conbini
+        store_type: CONVENIENCE_STORE
       properties:
         name:
-          example: Miguels Conbini
           type: string
         store_type:
-          example: CONVENIENCE_STORE
           type: string
       required:
       - name
@@ -107,15 +218,16 @@ components:
       example:
         name: Miguels Conbini
         id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        store_type: CONVENIENCE_STORE
+        created_at: 2022-07-21T02:05:41.527664Z
+        updated_at: 2022-07-21T02:05:41.527664Z
       properties:
         id:
           format: uuid
           type: string
         name:
-          example: Miguels Conbini
           type: string
         store_type:
-          example: CONVENIENCE_STORE
           type: string
         created_at:
           format: date-time
@@ -139,14 +251,15 @@ components:
       type: object
     User:
       example:
-        name: Org
         id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        name: Some Org
+        created_at: 2022-07-21T02:05:41.527664Z
+        updated_at: 2022-07-21T02:05:41.527664Z
       properties:
         id:
           format: uuid
           type: string
         name:
-          example: Some User
           type: string
         created_at:
           format: date-time

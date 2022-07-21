@@ -5,8 +5,8 @@
  */
 package jp.keio.acds.userservice.api;
 
-import jp.keio.acds.userservice.dto.Store;
-import jp.keio.acds.userservice.dto.StoreCreate;
+import jp.keio.acds.userservice.dto.Supplier;
+import jp.keio.acds.userservice.dto.SupplierCreate;
 import java.util.UUID;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -33,44 +33,44 @@ import javax.annotation.Generated;
 
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2022-07-21T11:23:14.446+09:00[Asia/Tokyo]")
 @Validated
-@Tag(name = "stores", description = "Store model")
-public interface StoresApi {
+@Tag(name = "suppliers", description = "Supplier model")
+public interface SuppliersApi {
 
     default Optional<NativeWebRequest> getRequest() {
         return Optional.empty();
     }
 
     /**
-     * POST /stores : Create a new store
+     * POST /suppliers : Create a new supplier
      *
-     * @param body Store fields (required)
-     * @return successful store creation (status code 200)
+     * @param body Supplier fields (required)
+     * @return successful supplier creation (status code 200)
      *         or Invalid input (status code 400)
      */
     @Operation(
-        operationId = "createStore",
-        summary = "Create a new store",
-        tags = { "store" },
+        operationId = "createSupplier",
+        summary = "Create a new supplier",
+        tags = { "supplier" },
         responses = {
-            @ApiResponse(responseCode = "200", description = "successful store creation", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = Store.class))
+            @ApiResponse(responseCode = "200", description = "successful supplier creation", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = Supplier.class))
             }),
             @ApiResponse(responseCode = "400", description = "Invalid input")
         }
     )
     @RequestMapping(
         method = RequestMethod.POST,
-        value = "/stores",
+        value = "/suppliers",
         produces = { "application/json" },
         consumes = { "application/json" }
     )
-    default ResponseEntity<Store> createStore(
-        @Parameter(name = "body", description = "Store fields", required = true) @Valid @RequestBody StoreCreate body
+    default ResponseEntity<Supplier> createSupplier(
+        @Parameter(name = "body", description = "Supplier fields", required = true) @Valid @RequestBody SupplierCreate body
     ) {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "{ \"name\" : \"Miguels Conbini\", \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\", \"store_type\" : \"CONVENIENCE_STORE\", \"created_at\" : \"2022-07-21T02:05:41.527664Z\", \"updated_at\" : \"2022-07-21T02:05:41.527664Z\" }";
+                    String exampleString = "{ \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\", \"name\" : \"Ricardo's Meat\", \"product_type\" : \"MEAT\", \"created_at\" : \"2022-07-21T02:05:41.527664Z\", \"updated_at\" : \"2022-07-21T02:05:41.527664Z\" }";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
                     break;
                 }
@@ -82,36 +82,36 @@ public interface StoresApi {
 
 
     /**
-     * GET /stores/{storeId} : Get store by id
-     * Gets a single store by id
+     * GET /suppliers/{supplierId} : Get supplier by id
+     * Gets a single supplier by id
      *
-     * @param storeId ID of store to return (required)
-     * @return successful listing of stores (status code 200)
-     *         or store with id inputted not found (status code 404)
+     * @param supplierId ID of supplier to return (required)
+     * @return successful listing of suppliers (status code 200)
+     *         or supplier with id inputted not found (status code 404)
      */
     @Operation(
-        operationId = "getStore",
-        summary = "Get store by id",
-        tags = { "store" },
+        operationId = "getSupplier",
+        summary = "Get supplier by id",
+        tags = { "supplier" },
         responses = {
-            @ApiResponse(responseCode = "200", description = "successful listing of stores", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = Store.class))
+            @ApiResponse(responseCode = "200", description = "successful listing of suppliers", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = Supplier.class))
             }),
-            @ApiResponse(responseCode = "404", description = "store with id inputted not found")
+            @ApiResponse(responseCode = "404", description = "supplier with id inputted not found")
         }
     )
     @RequestMapping(
         method = RequestMethod.GET,
-        value = "/stores/{storeId}",
+        value = "/suppliers/{supplierId}",
         produces = { "application/json" }
     )
-    default ResponseEntity<Store> getStore(
-        @Parameter(name = "storeId", description = "ID of store to return", required = true) @PathVariable("storeId") UUID storeId
+    default ResponseEntity<Supplier> getSupplier(
+        @Parameter(name = "supplierId", description = "ID of supplier to return", required = true) @PathVariable("supplierId") UUID supplierId
     ) {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "{ \"name\" : \"Miguels Conbini\", \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\", \"store_type\" : \"CONVENIENCE_STORE\", \"created_at\" : \"2022-07-21T02:05:41.527664Z\", \"updated_at\" : \"2022-07-21T02:05:41.527664Z\" }";
+                    String exampleString = "{ \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\", \"name\" : \"Ricardo's Meat\", \"product_type\" : \"MEAT\", \"created_at\" : \"2022-07-21T02:05:41.527664Z\", \"updated_at\" : \"2022-07-21T02:05:41.527664Z\" }";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
                     break;
                 }
@@ -123,33 +123,33 @@ public interface StoresApi {
 
 
     /**
-     * GET /stores : List stores
-     * Returns a list of stores
+     * GET /suppliers : List suppliers
+     * Returns a list of suppliers
      *
      * @return successful operation (status code 200)
      */
     @Operation(
-        operationId = "listStores",
-        summary = "List stores",
-        tags = { "store" },
+        operationId = "listSuppliers",
+        summary = "List suppliers",
+        tags = { "supplier" },
         responses = {
             @ApiResponse(responseCode = "200", description = "successful operation", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = Store.class))
+                @Content(mediaType = "application/json", schema = @Schema(implementation = Supplier.class))
             })
         }
     )
     @RequestMapping(
         method = RequestMethod.GET,
-        value = "/stores",
+        value = "/suppliers",
         produces = { "application/json" }
     )
-    default ResponseEntity<List<Store>> listStores(
+    default ResponseEntity<List<Supplier>> listSuppliers(
         
     ) {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "{ \"name\" : \"Miguels Conbini\", \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\", \"store_type\" : \"CONVENIENCE_STORE\", \"created_at\" : \"2022-07-21T02:05:41.527664Z\", \"updated_at\" : \"2022-07-21T02:05:41.527664Z\" }";
+                    String exampleString = "{ \"id\" : \"046b6c7f-0b8a-43b9-b35d-6489e6daee91\", \"name\" : \"Ricardo's Meat\", \"product_type\" : \"MEAT\", \"created_at\" : \"2022-07-21T02:05:41.527664Z\", \"updated_at\" : \"2022-07-21T02:05:41.527664Z\" }";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
                     break;
                 }

@@ -8,10 +8,10 @@ import com.scalar.db.service.TransactionFactory;
 import java.io.IOException;
 import java.util.Objects;
 
-public class BaseApiController {
-    private DistributedTransactionManager transactionManager;
+public class BaseService {
+    private final DistributedTransactionManager transactionManager;
 
-    public BaseApiController() {
+    public BaseService() {
         String SCALARDB_PROPERTIES_PATH = Objects.requireNonNull(getClass().getClassLoader().getResource("scalardb.properties")).getPath();
         System.out.println(SCALARDB_PROPERTIES_PATH);
         TransactionFactory factory = null;

@@ -22,4 +22,4 @@
 # Then explicitly reverse the ignore rule for a single file:
 #!docs/README.md
 
-src/main/java/jp/keio/acds/userservice/api/StoresApiController.java
+src/main/java/jp/keio/acds/userservice/api/*ApiController.java

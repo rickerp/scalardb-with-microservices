@@ -21,7 +21,7 @@ import javax.annotation.Generated;
  * Store
  */
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2022-07-21T02:33:08.865+09:00[Asia/Tokyo]")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2022-07-21T11:23:14.446+09:00[Asia/Tokyo]")
 public class Store {
 
   @JsonProperty("id")
@@ -70,7 +70,7 @@ public class Store {
    * @return name
   */
   @NotNull 
-  @Schema(name = "name", example = "Miguels Conbini", required = true)
+  @Schema(name = "name", required = true)
   public String getName() {
     return name;
   }
@@ -89,7 +89,7 @@ public class Store {
    * @return storeType
   */
   
-  @Schema(name = "store_type", example = "CONVENIENCE_STORE", required = false)
+  @Schema(name = "store_type", required = false)
   public String getStoreType() {
     return storeType;
   }

@@ -15,19 +15,19 @@ import java.util.*;
 import javax.annotation.Generated;
 
 /**
- * StoreCreate
+ * SupplierCreate
  */
 
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2022-07-21T11:23:14.446+09:00[Asia/Tokyo]")
-public class StoreCreate {
+public class SupplierCreate {
 
   @JsonProperty("name")
   private String name;
 
-  @JsonProperty("store_type")
-  private String storeType;
+  @JsonProperty("product_type")
+  private String productType;
 
-  public StoreCreate name(String name) {
+  public SupplierCreate name(String name) {
     this.name = name;
     return this;
   }
@@ -46,23 +46,23 @@ public class StoreCreate {
     this.name = name;
   }
 
-  public StoreCreate storeType(String storeType) {
-    this.storeType = storeType;
+  public SupplierCreate productType(String productType) {
+    this.productType = productType;
     return this;
   }
 
   /**
-   * Get storeType
-   * @return storeType
+   * Get productType
+   * @return productType
   */
   
-  @Schema(name = "store_type", required = false)
-  public String getStoreType() {
-    return storeType;
+  @Schema(name = "product_type", required = false)
+  public String getProductType() {
+    return productType;
   }
 
-  public void setStoreType(String storeType) {
-    this.storeType = storeType;
+  public void setProductType(String productType) {
+    this.productType = productType;
   }
 
   @Override
@@ -73,22 +73,22 @@ public class StoreCreate {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    StoreCreate storeCreate = (StoreCreate) o;
-    return Objects.equals(this.name, storeCreate.name) &&
-        Objects.equals(this.storeType, storeCreate.storeType);
+    SupplierCreate supplierCreate = (SupplierCreate) o;
+    return Objects.equals(this.name, supplierCreate.name) &&
+        Objects.equals(this.productType, supplierCreate.productType);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(name, storeType);
+    return Objects.hash(name, productType);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class StoreCreate {\n");
+    sb.append("class SupplierCreate {\n");
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
-    sb.append("    storeType: ").append(toIndentedString(storeType)).append("\n");
+    sb.append("    productType: ").append(toIndentedString(productType)).append("\n");
     sb.append("}");
     return sb.toString();
   }

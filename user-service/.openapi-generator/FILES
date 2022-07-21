@@ -4,10 +4,14 @@ src/main/java/jp/keio/acds/userservice/OpenApiGeneratorApplication.java
 src/main/java/jp/keio/acds/userservice/RFC3339DateFormat.java
 src/main/java/jp/keio/acds/userservice/api/ApiUtil.java
 src/main/java/jp/keio/acds/userservice/api/StoresApi.java
+src/main/java/jp/keio/acds/userservice/api/SuppliersApi.java
+src/main/java/jp/keio/acds/userservice/api/SuppliersApiController.java
 src/main/java/jp/keio/acds/userservice/configuration/HomeController.java
 src/main/java/jp/keio/acds/userservice/configuration/SpringDocConfiguration.java
 src/main/java/jp/keio/acds/userservice/dto/Store.java
 src/main/java/jp/keio/acds/userservice/dto/StoreCreate.java
+src/main/java/jp/keio/acds/userservice/dto/Supplier.java
+src/main/java/jp/keio/acds/userservice/dto/SupplierCreate.java
 src/main/java/jp/keio/acds/userservice/dto/User.java
 src/main/java/jp/keio/acds/userservice/dto/UserCreate.java
 src/main/resources/application.properties

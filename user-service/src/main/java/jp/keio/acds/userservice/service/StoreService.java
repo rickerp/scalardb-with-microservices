@@ -8,7 +8,7 @@ import jp.keio.acds.userservice.repository.StoreRepository;
 
 import java.util.UUID;
 
-public class StoreService extends BaseApiController {
+public class StoreService extends BaseService {
     private static final StoreRepository storeRepo = new StoreRepository();
 
     public Store get(UUID storeId) throws TransactionException {
