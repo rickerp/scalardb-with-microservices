@@ -20,11 +20,11 @@ public abstract class BaseService {
     }
 
 
-    public <R> R execute(Transaction<R> transaction) throws InterruptedException {
+    public <R> R execute(Transaction<R> transaction, DistributedTransaction dtx) throws InterruptedException {
         int retryCount = 0;
 
         while (true) {
-            DistributedTransaction tx = startTransaction();
+            DistributedTransaction tx = dtx == null ? startTransaction() : dtx;
 
             try {
                 return transaction.execute(tx);

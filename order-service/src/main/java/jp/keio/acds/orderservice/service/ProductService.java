@@ -1,8 +1,11 @@
 package jp.keio.acds.orderservice.service;
 
+import com.scalar.db.api.DistributedTransaction;
 import com.scalar.db.api.DistributedTransactionManager;
 import jp.keio.acds.orderservice.dto.CreateProductDto;
 import jp.keio.acds.orderservice.dto.GetProductDto;
+import jp.keio.acds.orderservice.exception.InternalServerErrorException;
+import jp.keio.acds.orderservice.exception.NotFoundException;
 import jp.keio.acds.orderservice.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,7 +30,7 @@ public class ProductService extends BaseService {
             String productId = productRepository.createProduct(tx, createProductDto);
             tx.commit();
             return productId;
-        });
+        }, null);
     }
 
     public GetProductDto getProduct(String productId) throws InterruptedException {
@@ -35,7 +38,7 @@ public class ProductService extends BaseService {
             GetProductDto getProductDto = productRepository.getProduct(tx, productId);
             tx.commit();
             return getProductDto;
-        });
+        }, null);
     }
 
     public List<GetProductDto> listProducts() throws InterruptedException {
@@ -43,6 +46,6 @@ public class ProductService extends BaseService {
             List<GetProductDto> getProductDtoList = productRepository.listProducts(tx);
             tx.commit();
             return getProductDtoList;
-        });
+        }, null);
     }
 }

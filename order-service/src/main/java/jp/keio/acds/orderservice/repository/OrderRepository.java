@@ -1,12 +1,11 @@
 package jp.keio.acds.orderservice.repository;
 
-import com.scalar.db.api.*;
+import com.scalar.db.api.DistributedTransaction;
+import com.scalar.db.api.Put;
+import com.scalar.db.api.Result;
 import com.scalar.db.exception.transaction.*;
 import com.scalar.db.io.Key;
-import jp.keio.acds.orderservice.dto.CreateOrderDto;
 import jp.keio.acds.orderservice.dto.GetOrderDto;
-import jp.keio.acds.orderservice.dto.GetProductDto;
-import jp.keio.acds.orderservice.exception.NotFoundException;
 import org.springframework.stereotype.Repository;
 
 import java.time.Instant;
@@ -24,15 +23,15 @@ public class OrderRepository extends BaseRepository<GetOrderDto> {
     private static final String TIMESTAMP = "timestamp";
 
 
-    public String createOrder(DistributedTransaction tx, CreateOrderDto createOrderDto) throws CrudException {
+    public String createOrder(DistributedTransaction tx, String fromID, String toId) throws CrudException {
         String orderId = UUID.randomUUID().toString();
 
         Put put = Put.newBuilder()
                 .namespace(NAMESPACE)
                 .table(TABLE_NAME)
                 .partitionKey(Key.ofText(ORDER_ID, orderId))
-                .textValue(FROM_ID, createOrderDto.getFromId())
-                .textValue(TO_ID, createOrderDto.getToId())
+                .textValue(FROM_ID, fromID)
+                .textValue(TO_ID, toId)
                 .textValue(TIMESTAMP, Instant.now().toString())
                 .build();
 
