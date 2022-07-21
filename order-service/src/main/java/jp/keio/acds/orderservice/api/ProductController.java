@@ -28,4 +28,9 @@ public class ProductController {
     public GetProductDto getProduct(@PathVariable("product_id") String productId) throws InterruptedException {
         return this.productService.getProduct(productId);
     }
+
+    @GetMapping()
+    public List<GetProductDto> listProducts() throws InterruptedException {
+        return this.productService.listProducts();
+    }
 }

@@ -5,8 +5,7 @@ import com.scalar.db.exception.transaction.*;
 import com.scalar.db.io.Key;
 import jp.keio.acds.orderservice.dto.CreateOrderDto;
 import jp.keio.acds.orderservice.dto.GetOrderDto;
-import jp.keio.acds.orderservice.exception.OrderNotFoundException;
-import jp.keio.acds.orderservice.model.Order;
+import jp.keio.acds.orderservice.exception.NotFoundException;
 import org.springframework.stereotype.Repository;
 
 import java.time.Instant;
@@ -49,7 +48,7 @@ public class OrderRepository {
 
         return toDto(tx.get(get)
                 .orElseThrow(
-                        () -> new OrderNotFoundException("ERROR : Order with ID " + orderId + " does not exist")));
+                        () -> new NotFoundException("ERROR : Order with ID " + orderId + " does not exist")));
     }
 
     private GetOrderDto toDto(Result result) {

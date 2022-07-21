@@ -5,8 +5,10 @@ import com.scalar.db.api.DistributedTransactionManager;
 import com.scalar.db.exception.transaction.*;
 import jp.keio.acds.orderservice.dto.CreateOrderDto;
 import jp.keio.acds.orderservice.dto.GetOrderDto;
-import jp.keio.acds.orderservice.exception.OrderNotFoundException;
-import jp.keio.acds.orderservice.exception.ServiceException;
+import jp.keio.acds.orderservice.dto.GetProductDto;
+import jp.keio.acds.orderservice.dto.OrderProductDto;
+import jp.keio.acds.orderservice.exception.NotFoundException;
+import jp.keio.acds.orderservice.exception.InternalServerErrorException;
 import jp.keio.acds.orderservice.repository.OrderRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +25,8 @@ public class OrderService {
 
     private final OrderRepository orderRepository;
 
+    private final ProductService productService;
+
     // For normal transactions
     private final DistributedTransactionManager manager;
 
@@ -32,9 +36,11 @@ public class OrderService {
 
     @Autowired
     public OrderService(OrderRepository orderRepository,
-                        DistributedTransactionManager manager) {
+                        DistributedTransactionManager manager,
+                        ProductService productService) {
         this.orderRepository = orderRepository;
         this.manager = manager;
+        this.productService = productService;
     }
 
     public String createOrder(CreateOrderDto createOrderDto) throws InterruptedException {
@@ -44,16 +50,25 @@ public class OrderService {
             DistributedTransaction tx = startTransaction();
 
             try {
+
                 String orderId = orderRepository.createOrder(tx, createOrderDto);
                 tx.commit();
                 return orderId;
             } catch (CommitConflictException | CrudConflictException e) {
                 retryTransaction(++retryCount);
             } catch (CommitException | CrudException | UnknownTransactionStatusException e) {
-                throw new ServiceException("ERROR : Failed to create order", e);
+                throw new InternalServerErrorException("ERROR : Failed to create order", e);
             } finally {
                 abortTransaction(tx);
             }
+        }
+    }
+
+    private GetProductDto getProductDto(OrderProductDto orderProductDto) {
+        try {
+            return productService.getProduct(orderProductDto.getProductId());
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -74,9 +89,7 @@ public class OrderService {
             } catch (CommitConflictException | CrudConflictException e) {
                 retryTransaction(++retryCount);
             } catch (CommitException | CrudException | UnknownTransactionStatusException e) {
-                throw new ServiceException("ERROR : Failed to get order", e);
-            } catch (OrderNotFoundException e) {
-                throw new ServiceException(e.getMessage(), e);
+                throw new InternalServerErrorException("ERROR : Failed to get order", e);
             } finally {
                 abortTransaction(tx);
             }
@@ -87,13 +100,13 @@ public class OrderService {
         try {
             return manager.start();
         } catch (TransactionException e) {
-            throw new ServiceException("ERROR : Could not start transaction manager", e);
+            throw new InternalServerErrorException("ERROR : Could not start transaction manager", e);
         }
     }
 
     private void retryTransaction(int retryCount) throws InterruptedException {
         if (retryCount == MAX_TRANSACTION_RETRIES) {
-            throw new ServiceException("ERROR : Failed transaction after 3 retries");
+            throw new InternalServerErrorException("ERROR : Failed transaction after 3 retries");
         }
         TimeUnit.MILLISECONDS.sleep(100);
     }
@@ -103,7 +116,7 @@ public class OrderService {
             tx.abort();
         } catch (AbortException ex) {
             log.error(ex.getMessage(), ex);
-            throw new ServiceException("ERROR : Could not abort transaction");
+            throw new InternalServerErrorException("ERROR : Could not abort transaction");
         }
     }
 }

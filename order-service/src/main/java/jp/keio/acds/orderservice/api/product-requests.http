@@ -19,4 +19,17 @@ Content-Type: application/json
 }
 
 ###
+POST http://localhost:8080/api/products
+Content-Type: application/json
+
+{
+  "owner_id": "B",
+  "name": "Mango",
+  "price": 3.00
+}
+
+###
 GET http://localhost:8080/api/products/397a950a-f65a-4db5-9f3e-de1a43ea3dd0
+
+###
+GET http://localhost:8080/api/products

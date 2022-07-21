@@ -6,18 +6,16 @@ import com.scalar.db.api.Put;
 import com.scalar.db.api.Result;
 import com.scalar.db.exception.transaction.CrudException;
 import com.scalar.db.io.Key;
-import jp.keio.acds.orderservice.dto.CreateOrderDto;
 import jp.keio.acds.orderservice.dto.CreateProductDto;
-import jp.keio.acds.orderservice.dto.GetOrderDto;
 import jp.keio.acds.orderservice.dto.GetProductDto;
-import jp.keio.acds.orderservice.exception.OrderNotFoundException;
+import jp.keio.acds.orderservice.exception.NotFoundException;
 import org.springframework.stereotype.Repository;
 
-import java.time.Instant;
+import java.util.List;
 import java.util.UUID;
 
 @Repository
-public class ProductRepository {
+public class ProductRepository extends ScalarRepository<GetProductDto> {
 
     private static final String NAMESPACE = "order-service";
     private static final String TABLE_NAME = "product";
@@ -44,18 +42,30 @@ public class ProductRepository {
     }
 
     public GetProductDto getProduct(DistributedTransaction tx, String productId) throws CrudException {
-        Get get = Get.newBuilder()
-                .namespace(NAMESPACE)
-                .table(TABLE_NAME)
-                .partitionKey(Key.ofText(PRODUCT_ID, productId))
-                .build();
-
-        return toDto(tx.get(get)
-                .orElseThrow(
-                        () -> new OrderNotFoundException("ERROR : Product with ID " + productId + " does not exist")));
+        return get(tx, productId);
     }
 
-    private GetProductDto toDto(Result result) {
+    public List<GetProductDto> listProducts(DistributedTransaction tx) throws CrudException {
+        return scan(tx);
+    }
+
+    @Override
+    protected String getNamespace() {
+        return NAMESPACE;
+    }
+
+    @Override
+    protected String getTable() {
+        return TABLE_NAME;
+    }
+
+    @Override
+    protected String getPartitionKey() {
+        return PRODUCT_ID;
+    }
+
+    @Override
+    protected GetProductDto toDto(Result result) {
         return GetProductDto.builder()
                 .productId(result.getText(PRODUCT_ID))
                 .ownerId(result.getText(OWNER_ID))
