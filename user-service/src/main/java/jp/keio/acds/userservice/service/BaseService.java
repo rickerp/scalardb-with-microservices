@@ -6,18 +6,19 @@ import com.scalar.db.exception.transaction.*;
 import com.scalar.db.service.TransactionFactory;
 import jp.keio.acds.userservice.exception.InternalError;
 
+import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 @FunctionalInterface
 interface Transaction<R> {
-    R execute(DistributedTransaction tx) throws CrudException, CommitException, UnknownTransactionStatusException;
+    @Nullable R execute(DistributedTransaction tx) throws TransactionException;
 }
 
 public class BaseService {
     private static final int MAX_TRANSACTION_RETRIES = 3;
-    private final DistributedTransactionManager transactionManager;
+    public final DistributedTransactionManager transactionManager;
 
     public BaseService() {
         String SCALARDB_PROPERTIES_PATH = Objects.requireNonNull(getClass().getClassLoader().getResource("scalardb.properties")).getPath();
@@ -31,7 +32,7 @@ public class BaseService {
         this.transactionManager = factory.getTransactionManager();
     }
 
-    protected <R> R execute(Transaction<R> transaction, DistributedTransaction dtx) throws InterruptedException {
+    protected <R> R execute(Transaction<R> transaction, DistributedTransaction dtx) {
         int retryCount = 0;
 
         while (true) {
@@ -57,11 +58,15 @@ public class BaseService {
         }
     }
 
-    private void retryTransaction(int retryCount) throws InterruptedException {
+    private void retryTransaction(int retryCount) {
         if (retryCount == MAX_TRANSACTION_RETRIES) {
             throw new InternalError("Max retries reached while retrying to execute transaction");
         }
-        TimeUnit.MILLISECONDS.sleep(100);
+        try {
+            TimeUnit.MILLISECONDS.sleep(100);
+        } catch (InterruptedException e) {
+            throw new InternalError("Thread sleep error", e);
+        }
     }
 
 

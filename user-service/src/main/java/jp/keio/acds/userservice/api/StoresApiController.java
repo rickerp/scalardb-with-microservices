@@ -1,6 +1,5 @@
 package jp.keio.acds.userservice.api;
 
-import com.scalar.db.exception.transaction.TransactionException;
 import jp.keio.acds.userservice.dto.Store;
 import jp.keio.acds.userservice.dto.StoreCreate;
 import jp.keio.acds.userservice.dto.StoreUpdate;
@@ -39,37 +38,27 @@ public class StoresApiController implements StoresApi {
 
     @Override
     public ResponseEntity<Store> getStore(UUID storeId) {
-        try {
-            return new ResponseEntity(storeService.get(storeId), HttpStatus.OK);
-        } catch (TransactionException e) {
-            return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        return new ResponseEntity(storeService.get(storeId), HttpStatus.OK);
     }
 
     @Override
     public ResponseEntity<List<Store>> listStores() {
-        try {
-            return new ResponseEntity(Arrays.asList(storeService.list()), HttpStatus.OK);
-        } catch (TransactionException e) {
-            return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        return new ResponseEntity(Arrays.asList(storeService.listStores()), HttpStatus.OK);
     }
 
     @Override
     public ResponseEntity<Store> createStore(StoreCreate body) {
-        try {
-            return new ResponseEntity(storeService.create(body), HttpStatus.OK);
-        } catch (TransactionException e) {
-            return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        return new ResponseEntity(storeService.createStore(body), HttpStatus.OK);
     }
 
     @Override
-    public ResponseEntity<Store> updateStore(UUID storeId, StoreUpdate body) {
-        try {
-            return new ResponseEntity(storeService.update(body), HttpStatus.OK);
-        } catch (TransactionException e) {
-            return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+    public ResponseEntity<Store> updateStore(UUID storeId, StoreUpdate storeUpdate) {
+        return new ResponseEntity(storeService.updateStore(storeId, storeUpdate), HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<Void> deleteStore(UUID storeId) {
+        storeService.deleteStore(storeId);
+        return new ResponseEntity(HttpStatus.OK);
     }
 }

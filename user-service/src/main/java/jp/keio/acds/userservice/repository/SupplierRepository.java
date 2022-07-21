@@ -15,6 +15,10 @@ import java.time.OffsetDateTime;
 import java.util.Objects;
 import java.util.UUID;
 
+class SupplierTable {
+    public static final String id = "id";
+    public static final String productType = "product_type";
+}
 
 @Repository
 public class SupplierRepository {
@@ -29,7 +33,7 @@ public class SupplierRepository {
     private static final ScanBuilder.PartitionKeyOrIndexKeyOrAll scan = Scan.newBuilder().namespace(NAMESPACE).table(TABLE);
 
     public Supplier get(DistributedTransaction tx, UUID supplierId) throws TransactionException, NotFound {
-        User user = userRepo.get(tx, supplierId);
+        User user = userRepo.getUser(tx, supplierId);
         return toDto(
                 tx.get(get
                         .partitionKey(Key.ofText(SupplierTable.id, supplierId.toString()))
@@ -44,7 +48,7 @@ public class SupplierRepository {
         return tx.scan(scan.all().build()).stream().map((result -> {
             User user;
             try {
-                user = userRepo.get(tx, UUID.fromString(Objects.requireNonNull(result.getText(SupplierTable.id))));
+                user = userRepo.getUser(tx, UUID.fromString(Objects.requireNonNull(result.getText(SupplierTable.id))));
             } catch (NotFound e) {
                 throw new InternalError();
             } catch (TransactionException e) {
@@ -57,7 +61,7 @@ public class SupplierRepository {
     public Supplier create(DistributedTransaction tx, SupplierCreate supplierIn) throws TransactionException {
         UserCreate userIn = new UserCreate();
         userIn.name(supplierIn.getName());
-        User user = userRepo.create(tx, userIn);
+        User user = userRepo.createStore(tx, userIn);
 
         tx.put(put
                 .partitionKey(Key.ofText(SupplierTable.id, user.getId().toString()))

@@ -38,28 +38,16 @@ public class SuppliersApiController implements SuppliersApi {
 
     @Override
     public ResponseEntity<Supplier> getSupplier(UUID supplierId) {
-        try {
-            return new ResponseEntity(supplierService.get(supplierId), HttpStatus.OK);
-        } catch (TransactionException e) {
-            return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        return new ResponseEntity(supplierService.get(supplierId), HttpStatus.OK);
     }
 
     @Override
     public ResponseEntity<List<Supplier>> listSuppliers() {
-        try {
-            return new ResponseEntity(Arrays.asList(supplierService.list()), HttpStatus.OK);
-        } catch (TransactionException e) {
-            return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        return new ResponseEntity(Arrays.asList(supplierService.list()), HttpStatus.OK);
     }
 
     @Override
     public ResponseEntity<Supplier> createSupplier(SupplierCreate body) {
-        try {
-            return new ResponseEntity(supplierService.create(body), HttpStatus.OK);
-        } catch (TransactionException e) {
-            return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        return new ResponseEntity(supplierService.create(body), HttpStatus.OK);
     }
 }
