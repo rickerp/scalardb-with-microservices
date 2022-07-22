@@ -1,5 +1,6 @@
-# keio-acds-project
-Advanced Course in Database Systems project integrating ScalarDB with microservices
+# ScalarDB in a Monolith Architecture
+
+This branch represents the first phase of the project, where the idea was to use and implement ScalarDB 3.6.0 with two JDBC databases based on the tutorials available.
 
 # Prerequisites
 - OpenJDK 8
