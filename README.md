@@ -1,11 +1,11 @@
 # keio-acds-project
 Advanced Course in Database Systems project: Phase 2
 
-This branch represents the second phase of the project, where the idea was to use and implement ScalarDB 3.6.0 in a microservice architecture.
-The project was developed using SpringBoot as the backend.
+This branch represents the second phase of the project, where the idea was to use and implement ScalarDB 3.6.0 in a microservice architecture.\
+The project was developed using SpringBoot as the backend.\
 ScalarDB was implementd in two different Spring layers:
 - In the persistence layer (Repository classes): Use ScalarDB Java API to access the databases
-- In the buissness logic layer (Service classes): Implement transaction logic and exception handling
+- In the buissness logic layer (Service classes): Implement transaction logic and exception handling\
 For transactions that span multiple microservices, a `TwoPhaseCommitTransaction` was used, acording to the ScalarDB docs.
 
 # Prerequisites
@@ -14,7 +14,7 @@ For transactions that span multiple microservices, a `TwoPhaseCommitTransaction`
 - PostgreSQL and MySQL
 
 # Architecture
-Our project is composed of 2 microservices. 
+Our project is composed of 2 microservices.
 
 The `order-service` is hosted on PostgreSQL and it manages all orders and associated products. The `user-service` is hosted on MySQL and it manages all customers. 
 
@@ -103,4 +103,4 @@ In the case of the `user-service`, OpenAPI was also used to generate the boilerp
 
 ### For `order-service`
 
-For the `order-service`, there is no prepared interface, but reuqests can be made using `curl` or prepared `.http` files.
+For the `order-service`, there is no prepared interface, but requests can be made using `curl` or prepared `.http` files.

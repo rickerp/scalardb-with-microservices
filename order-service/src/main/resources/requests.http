@@ -1,0 +1,55 @@
+###
+POST http://localhost:8080/stores
+Content-Type: application/json
+
+{
+  "name": "Store A",
+  "store_type": "CONVENIENCE_STORE"
+}
+
+###
+POST http://localhost:8080/suppliers
+Content-Type: application/json
+
+{
+  "name": "Supplier A",
+  "product_type": "MEAT"
+}
+
+###
+POST http://localhost:8081/api/products
+Content-Type: application/json
+
+{
+  "owner_id": "391e9235-c42e-437b-9adc-d3612b2c813b",
+  "name": "Apple",
+  "price": 1.60
+}
+
+###
+POST http://localhost:8081/api/products
+Content-Type: application/json
+
+{
+  "owner_id": "391e9235-c42e-437b-9adc-d3612b2c813b",
+  "name": "Orange",
+  "price": 2.00
+}
+
+###
+POST http://localhost:8081/api/orders
+Content-Type: application/json
+
+{
+  "to_id": "fb45a523-1947-4a31-9255-8749ceea616e",
+  "order_products": [
+    {
+      "product_id": "916b36e6-5666-4647-9ba9-fd4cb8d5e92a",
+      "count": 5
+    },
+    {
+      "product_id": "9eeeeaea-0f87-4775-b078-96f57faa8229",
+      "count": 2
+    }
+  ]
+}
