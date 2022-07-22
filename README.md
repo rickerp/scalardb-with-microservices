@@ -15,7 +15,7 @@ The `order-service` is hosted in PostgerSQL and it manages all orders. The `user
 Here is the schema of your architecture:
 ![alt text](https://github.com/rickerp/keio-acds-project/blob/microservices/Architecture.png)
 
-The communication between these 2 microservices is managed with ScalarDB and especially the `TwoWayTransaction???`. Moreover, we used Spring Boot to generate a web support and application.  
+The communication between these 2 microservices is managed with ScalarDB and especially we use the `TwoPhaseCommitTransaction???` logic. Moreover, we used Spring Boot to generate a web support and application.  
 
 # Execution and Command
 The project mist be load in the `localhost` host and the port `8180`.  
