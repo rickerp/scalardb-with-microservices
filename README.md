@@ -7,6 +7,8 @@ Advanced Course in Database Systems project integrating ScalarDB with microservi
 - Docker
 - Spring Boot
 
+If you need more details about the prerequisites please see the [HELP.md](https://github.com/rickerp/keio-acds-project/HELP.mb)
+
 # Architecture
 Our project is composed of 2 microservices. 
 
