@@ -242,10 +242,10 @@ paths:
       x-tags:
       - tag: stores
       x-content-type: application/json
-  /stores/{storeId}/registerOrder:
+  /stores/{storeId}/checkUser:
     put:
-      description: Register order
-      operationId: registerOrder
+      description: Check User
+      operationId: checkUser
       parameters:
       - description: ID of store
         explode: false
@@ -264,8 +264,8 @@ paths:
         required: true
       responses:
         "200":
-          description: successfully registered order
-      summary: Register order by id
+          description: successfully checked user
+      summary: Check user by id
       tags:
       - stores
       x-accepts: application/json

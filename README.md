@@ -1,32 +1,106 @@
 # keio-acds-project
-Advanced Course in Database Systems project integrating ScalarDB with microservices
+Advanced Course in Database Systems project: Phase 2
+
+This branch represents the second phase of the project, where the idea was to use and implement ScalarDB 3.6.0 in a microservice architecture.
+The project was developed using SpringBoot as the backend.
+ScalarDB was implementd in two different Spring layers:
+- In the persistence layer (Repository classes): Use ScalarDB Java API to access the databases
+- In the buissness logic layer (Service classes): Implement transaction logic and exception handling
+For transactions that span multiple microservices, a `TwoPhaseCommitTransaction` was used, acording to the ScalarDB docs.
 
 # Prerequisites
 - OpenJDK 8
-- the JDBC instance: MySQL **AND** PostgreSQL
-- Docker
 - Spring Boot
-
-If you need more details on the prerequisites, please see the [HELP.md](https://github.com/rickerp/keio-acds-project/blob/microservices/HELP.md)
+- PostgreSQL and MySQL
 
 # Architecture
 Our project is composed of 2 microservices. 
 
-The `order-service` is hosted on PostgreSQL and it manages all orders. The `user service` is hosted on MySQL and it manages all customers and their products. 
+The `order-service` is hosted on PostgreSQL and it manages all orders and associated products. The `user-service` is hosted on MySQL and it manages all customers. 
 
 Here is the schema of our architecture:
-![alt text](https://github.com/rickerp/keio-acds-project/blob/microservices/Architecture.png)
+![alt text](https://github.com/rickerp/keio-acds-project/blob/microservices/images/Architecture.png)
 
-The communication between these 2 microservices is managed with ScalarDB and especially we use the `TwoPhaseCommitTransaction` logic. Moreover, we used Spring Boot to generate a support and a web application.  
+## API
 
-# Execution and Command
-The project must be loaded on host `localhost` and port `8081`. 
+The available REST calls can be seen in the following tables:
 
-Therefor, to have access to your project please clone the repository in your local environment. Open the project with a text editor, like IntelliJ IDEA or Eclipse (Java or JEE). Then compile and build the project. Don't forget to have the port 8081 open and free. Then, open a navigator and go to the link `http://localhost:8081`.  
+### For `user-service`
 
-Our project have multiple command to POST, GET, DELETE, PUT datas in our databases. You can see the list in the following links:
-- [Order request](https://github.com/rickerp/keio-acds-project/blob/microservices/order-service/src/main/java/jp/keio/acds/orderservice/api/order-requests.http) 
-- [Product request](https://github.com/rickerp/keio-acds-project/blob/microservices/order-service/src/main/java/jp/keio/acds/orderservice/api/product-requests.http)
-- 
+| URI | HTTP | Description |
+| --- | ---------- | ------------ |
+| /stores | POST | Create new store |
+| /stores | GET | Get all stores |
+| /stores/{store_id} | PUT | Update store |
+| /stores/{store_id} | GET | Get specific store |
+| /stores/{storeId}/checkUser | PUT | Verify if a user exists |
+| /suppliers | POST | Create a new supplier |
+| /suppliers | GET | Get all suppliers |
+| /suppliers/{supplierId} | PUT | Update supplier |
+| /suppliers/{supplierId} | GET | Get a supplier |
 
+### For `order-service`
 
+| URI | HTTP | Description |
+| --- | ---------- | ------------ |
+| /api/orders | POST | Create a new order |
+| /api/orders | GET | List all orders |
+| /api/orders/{order_id} | GET | Get specific order |
+| /api/products | POST | Create a new product |
+| /api/products | GET | List all products |
+| /api/products/{product_id} | GET | Get specific product |
+
+Notes:
+- The `TwoPhaseCommitTransaction` is currently used when creating an order. Only stores can make orders to suppliers, so this condition is checked by accessing the `user-service`.
+- DELETE requests were also implemented, but do not currently work as expected due to an unresolved ScalarDB mutation exception.
+
+### For internal use (`TwoPhaseCommitTransaction`)
+
+| URI | HTTP |
+| --- | ---------- |
+| /scalardb/join/{transactionId} | GET |
+| /scalardb/prepare/{transactionId} | GET |
+| /scalardb/commit/{transactionId} | GET |
+| /scalardb/rollback/{transactionId} | GET |
+
+# Execution
+
+## Set up ScalarDB and Databases
+
+For Postgres:
+- Creating a user `scalar` with password `scalar`
+- Create a `orderservice` database
+
+For MySql:
+- Creating a user `scalar` with password `scalar`
+- Create a `userservice` database
+
+For ScalarDB:
+- Download the schema-loader for version 3.6.0
+- In `/user-service` folder, run the following (replace schema-loader path):
+    - `java -jar /path/to/schema-loader.jar --config src/main/resources/scalardb.properties --schema-file src/main/resources/schema.scalardb.json --coordinator`
+- In `/order-service` folder, run the following (replace schema-loader path):
+    - `java -jar /path/to/schema-loader.jar --config src/main/resources/scalardb.properties --schema-file order-service-schema.json --coordinator`
+
+## Building and Running
+
+This phase of the project was developed using IntelIJ, and is best built and run in two different instances of the IDE: one for each microservice.
+If not using an IDE, the manual instructions are as follows:
+
+For each microservice, run:
+- `./gradlew build`
+- `./gradlew bootRun`
+
+## Making Requests
+
+Each microservice is launched as a different application locally. The `order-service` uses port `8081` while the `user-service` uses port `8080`.
+
+### For `user-service`
+
+In the case of the `user-service`, OpenAPI was also used to generate the boilerplate code for Spring (see generator [here](https://github.com/rickerp/keio-acds-project/blob/25e3a3b905f14bc69a3d0dbed79875aadfb43052/user-service/src/main/resources/openapi.yaml)). This means that by accessing the localhost while the `user-service` is running will present an interface to make the requests:
+
+![alt text](https://github.com/rickerp/keio-acds-project/blob/microservices/images/Interface.png)
+
+### For `order-service`
+
+For the `order-service`, there is no prepared interface, but reuqests can be made using `curl` or prepared `.http` files.

@@ -192,7 +192,7 @@ public interface StoresApi {
 
 
     /**
-     * PUT /stores/{storeId}/registerOrder : Register order by id
+     * PUT /stores/{storeId}/checkUser : Register order by id
      * Register order
      *
      * @param storeId ID of store (required)
