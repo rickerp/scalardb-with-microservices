@@ -19,7 +19,7 @@ Our project is composed of 2 microservices.
 The `order-service` is hosted on PostgreSQL and it manages all orders and associated products. The `user-service` is hosted on MySQL and it manages all customers. 
 
 Here is the schema of our architecture:
-![alt text](https://github.com/rickerp/keio-acds-project/blob/microservices/images/Architecture.png)
+![alt text](https://github.com/rickerp/keio-acds-project/blob/4f0d9b7cd9b00a327aa95462d4c6ab2c8b389d66/images/Architecture.png)
 
 ## API
 
@@ -97,10 +97,12 @@ Each microservice is launched as a different application locally. The `order-ser
 
 ### For `user-service`
 
-In the case of the `user-service`, OpenAPI was also used to generate the boilerplate code for Spring (see generator [here](https://github.com/rickerp/keio-acds-project/blob/25e3a3b905f14bc69a3d0dbed79875aadfb43052/user-service/src/main/resources/openapi.yaml)). This means that by accessing the localhost while the `user-service` is running will present an interface to make the requests:
+In the case of the `user-service`, OpenAPI was also used to generate the boilerplate code for Spring (see generator [here](https://github.com/rickerp/keio-acds-project/blob/4f0d9b7cd9b00a327aa95462d4c6ab2c8b389d66/user-service/src/main/resources/openapi.yaml)). This means that by accessing the localhost while the `user-service` is running will present an interface to make the requests:
 
-![alt text](https://github.com/rickerp/keio-acds-project/blob/microservices/images/Interface.png)
+![alt text](https://github.com/rickerp/keio-acds-project/blob/4f0d9b7cd9b00a327aa95462d4c6ab2c8b389d66/images/Interface.png)
 
 ### For `order-service`
 
-For the `order-service`, there is no prepared interface, but requests can be made using `curl` or prepared `.http` files.
+For the `order-service`, there is no prepared interface, but requests can be made using `curl` or a prepared `.http` file [here](https://github.com/rickerp/keio-acds-project/blob/4f0d9b7cd9b00a327aa95462d4c6ab2c8b389d66/order-service/src/main/resources/requests.http)
+
+Note that the system checks the validaty of some ids, so the ones in the .http example need to be replaced with what is return form POST and GET requests.
