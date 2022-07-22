@@ -24,7 +24,7 @@ Therefor, to have access to your project please clone the repository in your loc
 
 Our project have multiple command to POST, GET, DELETE, PUT datas in our databases. You can see the list in the following links:
 - [Order request](https://github.com/rickerp/keio-acds-project/blob/microservices/order-service/src/main/java/jp/keio/acds/orderservice/api/order-requests.http) 
-- [Product request]()
+- [Product request](https://github.com/rickerp/keio-acds-project/blob/microservices/order-service/src/main/java/jp/keio/acds/orderservice/api/product-requests.http)
 - 
 # Contact
 
