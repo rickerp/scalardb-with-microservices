@@ -1,6 +1,6 @@
 # ScalarDB in a Monolith Architecture
 
-This branch represents the first phase of the project, where the idea was to use and implement ScalarDB 3.6.0 with two JDBC databases based on the tutorials available.
+This branch represents the first phase of the project, where the idea was to use and implement ScalarDB with two JDBC databases based on the tutorials available.
 
 # Prerequisites
 - OpenJDK 8
