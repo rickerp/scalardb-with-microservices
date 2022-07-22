@@ -19,4 +19,10 @@ The communication between these 2 microservices is managed with ScalarDB and esp
 
 # Execution and Command
 The project mist be load in the `localhost` host and the port `8081`. 
-Therefore to have access to your project please clone the repository in your local environment. Open the project with a text editor, like IntelliJ IDEA or Eclipse (Java or JEE). Then compile and build the project. Don't forget to have the port 8180 open and free. Then, open a navigator and go to the link `http://localhost:8081`.  
+
+Therefor, to have access to your project please clone the repository in your local environment. Open the project with a text editor, like IntelliJ IDEA or Eclipse (Java or JEE). Then compile and build the project. Don't forget to have the port 8081 open and free. Then, open a navigator and go to the link `http://localhost:8081`.  
+
+
+# Contact
+
+
