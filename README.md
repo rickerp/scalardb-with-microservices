@@ -1,5 +1,4 @@
-# keio-acds-project
-Advanced Course in Database Systems project: Phase 2
+# ScalarDB in a Microservices Architecture
 
 This branch represents the second phase of the project, where the idea was to use and implement ScalarDB 3.6.0 in a microservice architecture.\
 The project was developed using SpringBoot as the backend.\
@@ -7,6 +6,8 @@ ScalarDB was implementd in two different Spring layers:
 - In the persistence layer (Repository classes): Use ScalarDB Java API to access the databases
 - In the buissness logic layer (Service classes): Implement transaction logic and exception handling\
 For transactions that span multiple microservices, a `TwoPhaseCommitTransaction` was used, acording to the ScalarDB docs.
+
+For phase one of the project (monolith architecture) check the `monolith` branch.
 
 # Prerequisites
 - OpenJDK 8
