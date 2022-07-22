@@ -1,6 +1,5 @@
 package jp.keio.acds.userservice.api;
 
-import com.scalar.db.exception.transaction.TransactionException;
 import jp.keio.acds.userservice.dto.Supplier;
 import jp.keio.acds.userservice.dto.SupplierCreate;
 import jp.keio.acds.userservice.service.SupplierService;
@@ -21,14 +20,15 @@ import java.util.UUID;
 @Controller
 @RequestMapping("${openapi.userService.base-path:}")
 public class SuppliersApiController implements SuppliersApi {
-    private static final SupplierService supplierService = new SupplierService();
+    private final SupplierService supplierService;
 
 
     private final NativeWebRequest request;
 
     @Autowired
-    public SuppliersApiController(NativeWebRequest request) {
+    public SuppliersApiController(NativeWebRequest request, SupplierService supplierService) {
         this.request = request;
+        this.supplierService = supplierService;
     }
 
     @Override

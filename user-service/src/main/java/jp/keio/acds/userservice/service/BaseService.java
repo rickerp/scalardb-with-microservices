@@ -5,12 +5,11 @@ import com.scalar.db.api.DistributedTransactionManager;
 import com.scalar.db.api.TwoPhaseCommitTransaction;
 import com.scalar.db.api.TwoPhaseCommitTransactionManager;
 import com.scalar.db.exception.transaction.*;
-import com.scalar.db.service.TransactionFactory;
 import jp.keio.acds.userservice.exception.InternalError;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import javax.annotation.Nullable;
-import java.io.IOException;
-import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
@@ -24,23 +23,20 @@ interface MicroserviceTransaction<R> {
     @Nullable R execute(TwoPhaseCommitTransaction tx) throws TransactionException;
 }
 
+@Service
 public class BaseService {
     private static final int MAX_TRANSACTION_RETRIES = 3;
-    public final DistributedTransactionManager transactionManager;
 
-    public final TwoPhaseCommitTransactionManager microserviceTransactionManager;
+    private final DistributedTransactionManager manager;
 
-    public BaseService() {
-        String SCALARDB_PROPERTIES_PATH = Objects.requireNonNull(getClass().getClassLoader().getResource("scalardb.properties")).getPath();
+    private final TwoPhaseCommitTransactionManager microserviceManager;
 
-        TransactionFactory factory;
-        try {
-            factory = TransactionFactory.create(SCALARDB_PROPERTIES_PATH);
-        } catch (IOException e) {
-            throw new RuntimeException("FAILED TO CREATE TRANSACTION FACTORY");
-        }
-        this.transactionManager = factory.getTransactionManager();
-        this.microserviceTransactionManager = factory.getTwoPhaseCommitTransactionManager();
+
+    @Autowired
+    public BaseService(DistributedTransactionManager manager, TwoPhaseCommitTransactionManager microserviceManager) {
+
+        this.manager = manager;
+        this.microserviceManager = microserviceManager;
     }
 
     protected <R> R execute(Transaction<R> transaction, DistributedTransaction dtx) {
@@ -61,11 +57,11 @@ public class BaseService {
         }
     }
 
-    protected <R> R execute(MicroserviceTransaction<R> transaction, UUID transactionId) {
+    protected <R> R execute(MicroserviceTransaction<R> transaction, String transactionId) {
         int retryCount = 0;
 
         while (true) {
-            TwoPhaseCommitTransaction tx = resumeTransaction(transactionId.toString());
+            TwoPhaseCommitTransaction tx = resumeTransaction(transactionId);
 
             try {
                 return transaction.execute(tx);
@@ -81,7 +77,7 @@ public class BaseService {
 
     private DistributedTransaction startTransaction() {
         try {
-            return this.transactionManager.start();
+            return this.manager.start();
         } catch (TransactionException e) {
             throw new InternalError("Error starting ScalarDB transaction", e);
         }
@@ -89,7 +85,7 @@ public class BaseService {
 
     private TwoPhaseCommitTransaction startMicroserviceTransaction() {
         try {
-            return microserviceTransactionManager.start();
+            return microserviceManager.start();
         } catch (TransactionException e) {
             throw new InternalError("Error, could not start two phase commit transaction manager", e);
         }
@@ -117,7 +113,7 @@ public class BaseService {
 
     public void joinTransaction(UUID transactionId) {
         try {
-            TwoPhaseCommitTransaction tx = microserviceTransactionManager.join(transactionId.toString());
+            TwoPhaseCommitTransaction tx = microserviceManager.join(transactionId.toString());
             suspendTransaction(tx);
         } catch (TransactionException e) {
             throw new InternalError("Error, could not join transaction");
@@ -160,7 +156,7 @@ public class BaseService {
 
     private TwoPhaseCommitTransaction resumeTransaction(String transactionId) {
         try {
-            return microserviceTransactionManager.resume(transactionId);
+            return microserviceManager.resume(transactionId);
         } catch (TransactionException e) {
             throw new InternalError("Error, could not resume transaction");
         }
@@ -168,7 +164,7 @@ public class BaseService {
 
     private void suspendTransaction(TwoPhaseCommitTransaction tx) {
         try {
-            microserviceTransactionManager.suspend(tx);
+            microserviceManager.suspend(tx);
         } catch (TransactionException e) {
             throw new InternalError("Error, could not suspend transaction");
         }

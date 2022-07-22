@@ -12,7 +12,6 @@ import org.springframework.web.reactive.function.client.WebClient;
 import java.time.Duration;
 import java.util.concurrent.TimeUnit;
 
-@Slf4j
 public abstract class BaseService {
 
     private static final int MAX_TRANSACTION_RETRIES = 3;

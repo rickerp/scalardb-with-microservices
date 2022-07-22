@@ -9,7 +9,6 @@ import jp.keio.acds.orderservice.exception.BadRequestException;
 import jp.keio.acds.orderservice.repository.OrderProductRepository;
 import jp.keio.acds.orderservice.repository.OrderRepository;
 import jp.keio.acds.orderservice.repository.ProductRepository;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.BodyInserters;
@@ -21,10 +20,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-@Slf4j
 public class OrderService extends BaseService {
 
-    private static final String REGISTER_ORDER_URI = "/stores/./registerOrder";
+    private static final String STORE_EXISTS_URI = "/stores/./checkUser";
 
     private final OrderRepository orderRepository;
 
@@ -47,7 +45,6 @@ public class OrderService extends BaseService {
         this.orderProductRepository = orderProductRepository;
         this.productRepository = productRepository;
         this.userMicroserviceClient = userMicroserviceClient;
-
     }
 
     public String createOrder(CreateOrderDto createOrderDto) throws InterruptedException {
@@ -67,7 +64,7 @@ public class OrderService extends BaseService {
                         orderProductDto.getCount());
             }
 
-            sendRegisterOrderRequest(txId, createOrderDto.getToId());
+            sendStoreExistsRequest(txId, createOrderDto.getToId());
 
             prepareTransaction(tx, userMicroserviceClient);
             commitTransaction(tx, userMicroserviceClient);
@@ -118,9 +115,9 @@ public class OrderService extends BaseService {
         return ownerIds.get(0);
     }
 
-    private void sendRegisterOrderRequest(String txId, String storeId) {
+    private void sendStoreExistsRequest(String txId, String storeId) {
         userMicroserviceClient.put()
-                .uri(REGISTER_ORDER_URI.replace(".", storeId))
+                .uri(STORE_EXISTS_URI.replace(".", storeId))
                 .body(BodyInserters.fromValue(RegisterOrderDto.builder().txId(txId).build()))
                 .retrieve()
                 .bodyToMono(Void.class)

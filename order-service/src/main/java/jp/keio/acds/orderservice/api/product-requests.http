@@ -33,3 +33,13 @@ GET http://localhost:8080/api/products/397a950a-f65a-4db5-9f3e-de1a43ea3dd0
 
 ###
 GET http://localhost:8080/api/products
+
+###
+POST http://localhost:8081/api/products
+Content-Type: application/json
+
+{
+  "owner_id": "4ae7e80e-41f0-44b5-92b8-ac21c9a99602",
+  "name": "Beef",
+  "price": 30.00
+}

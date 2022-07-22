@@ -1,0 +1,17 @@
+###
+POST http://localhost:8080/stores
+Content-Type: application/json
+
+{
+  "name": "Test Store",
+  "store_type": "CONVENIENCE_STORE"
+}
+
+###
+POST http://localhost:8080/suppliers
+Content-Type: application/json
+
+{
+  "name": "Test Supplier",
+  "product_type": "MEAT"
+}

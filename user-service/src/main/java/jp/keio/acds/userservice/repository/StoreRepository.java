@@ -31,7 +31,7 @@ public class StoreRepository {
     private static final GetBuilder.PartitionKeyOrIndexKey get = Get.newBuilder().namespace(NAMESPACE).table(TABLE);
     private static final ScanBuilder.PartitionKeyOrIndexKeyOrAll scan = Scan.newBuilder().namespace(NAMESPACE).table(TABLE);
 
-    public Store getStore(DistributedTransaction tx, UUID storeId) throws TransactionException, NotFound {
+    public Store getStore(TransactionCrudOperable tx, UUID storeId) throws TransactionException, NotFound {
         User user = userRepo.getUser(tx, storeId);
         return toDto(
                 tx.get(get

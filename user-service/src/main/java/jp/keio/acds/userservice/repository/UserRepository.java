@@ -33,7 +33,7 @@ public class UserRepository {
     private static final GetBuilder.PartitionKeyOrIndexKey get = Get.newBuilder().namespace(NAMESPACE).table(TABLE);
     private static final ScanBuilder.PartitionKeyOrIndexKeyOrAll scan = Scan.newBuilder().namespace(NAMESPACE).table(TABLE);
 
-    public User getUser(DistributedTransaction tx, UUID userId) throws TransactionException, NotFound {
+    public User getUser(TransactionCrudOperable tx, UUID userId) throws TransactionException, NotFound {
         return toDto(tx.get(get.partitionKey(Key.ofText(UserTable.id, userId.toString())).build()).orElseThrow(NotFound::new));
     }
 

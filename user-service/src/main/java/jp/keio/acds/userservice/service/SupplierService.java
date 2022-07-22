@@ -1,14 +1,27 @@
 package jp.keio.acds.userservice.service;
 
-import com.scalar.db.exception.transaction.TransactionException;
+import com.scalar.db.api.DistributedTransactionManager;
+import com.scalar.db.api.TwoPhaseCommitTransactionManager;
 import jp.keio.acds.userservice.dto.Supplier;
 import jp.keio.acds.userservice.dto.SupplierCreate;
 import jp.keio.acds.userservice.repository.SupplierRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.UUID;
 
+@Service
 public class SupplierService extends BaseService {
-    private static final SupplierRepository supplierRepo = new SupplierRepository();
+    private final SupplierRepository supplierRepo;
+
+
+    @Autowired
+    public SupplierService(SupplierRepository supplierRepo,
+                        DistributedTransactionManager manager,
+                        TwoPhaseCommitTransactionManager microserviceManager) {
+        super(manager, microserviceManager);
+        this.supplierRepo = supplierRepo;
+    }
 
     public Supplier get(UUID supplierId) {
         return this.execute((Transaction<Supplier>) tx -> supplierRepo.get(tx, supplierId), null);

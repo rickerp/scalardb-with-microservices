@@ -200,8 +200,8 @@ public interface StoresApi {
      * @return successfully registered order (status code 200)
      */
     @Operation(
-        operationId = "registerOrder",
-        summary = "Register order by id",
+        operationId = "checkUser",
+        summary = "Check user by id",
         tags = { "stores" },
         responses = {
             @ApiResponse(responseCode = "200", description = "successfully registered order")
@@ -209,10 +209,10 @@ public interface StoresApi {
     )
     @RequestMapping(
         method = RequestMethod.PUT,
-        value = "/stores/{storeId}/registerOrder",
+        value = "/stores/{storeId}/checkUser",
         consumes = { "application/json" }
     )
-    default ResponseEntity<Void> registerOrder(
+    default ResponseEntity<Void> checkUser(
         @Parameter(name = "storeId", description = "ID of store", required = true) @PathVariable("storeId") String storeId,
         @Parameter(name = "TransactionUpdate", description = "Store fields to update", required = true) @Valid @RequestBody TransactionUpdate transactionUpdate
     ) {

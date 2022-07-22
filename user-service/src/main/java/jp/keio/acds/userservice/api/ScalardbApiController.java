@@ -3,29 +3,14 @@ package jp.keio.acds.userservice.api;
 import java.util.UUID;
 
 
-import io.swagger.v3.oas.annotations.Parameter;
 import jp.keio.acds.userservice.service.BaseService;
-import jp.keio.acds.userservice.service.StoreService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.CookieValue;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.context.request.NativeWebRequest;
 
-import javax.validation.constraints.*;
-import javax.validation.Valid;
-
-import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import javax.annotation.Generated;
 
@@ -34,12 +19,13 @@ import javax.annotation.Generated;
 @RequestMapping("${openapi.userService.base-path:}")
 public class ScalardbApiController implements ScalardbApi {
 
-    private static final BaseService baseService = new BaseService();
+    private final BaseService baseService;
     private final NativeWebRequest request;
 
     @Autowired
-    public ScalardbApiController(NativeWebRequest request) {
+    public ScalardbApiController(NativeWebRequest request, BaseService baseService) {
         this.request = request;
+        this.baseService = baseService;
     }
 
     @Override
@@ -49,6 +35,7 @@ public class ScalardbApiController implements ScalardbApi {
 
     @Override
     public ResponseEntity<Void> join(UUID transactionId) {
+        System.out.println("JOIN");
         baseService.joinTransaction(transactionId);
         return new ResponseEntity<>(HttpStatus.OK);
     }

@@ -63,15 +63,11 @@ POST http://localhost:8081/api/orders
 Content-Type: application/json
 
 {
-  "to_id": "C",
+  "to_id": "5970c6ad-2c5c-451f-829d-6b87ab9cb74d",
   "order_products": [
     {
-      "product_id": "845571a2-ab38-48ee-9cec-1b455f0f0bed",
-      "count": 3
-    },
-    {
-      "product_id": "397a950a-f65a-4db5-9f3e-de1a43ea3dd0",
-      "count": 10
+      "product_id": "563a3f11-1de0-4037-8cb0-e1b1e7aafb81",
+      "count": 2
     }
   ]
 }

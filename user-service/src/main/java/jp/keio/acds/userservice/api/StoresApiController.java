@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.context.request.NativeWebRequest;
 
@@ -23,14 +22,14 @@ import java.util.UUID;
 @Controller
 @RequestMapping("${openapi.userService.base-path:}")
 public class StoresApiController implements StoresApi {
-    private static final StoreService storeService = new StoreService();
-
+    private final StoreService storeService;
 
     private final NativeWebRequest request;
 
     @Autowired
-    public StoresApiController(NativeWebRequest request) {
+    public StoresApiController(NativeWebRequest request, StoreService storeService) {
         this.request = request;
+        this.storeService = storeService;
     }
 
     @Override
@@ -65,8 +64,8 @@ public class StoresApiController implements StoresApi {
     }
 
     @Override
-    public ResponseEntity<Void> registerOrder(String storeId, TransactionUpdate transactionUpdate) {
-        transactionUpdate.getTransactionId();
+    public ResponseEntity<Void> checkUser(String storeId, TransactionUpdate transactionUpdate) {
+        storeService.exists(storeId, transactionUpdate.getTransactionId());
         return new ResponseEntity(HttpStatus.OK);
     }
 }
