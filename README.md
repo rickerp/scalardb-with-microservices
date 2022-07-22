@@ -7,7 +7,7 @@ Advanced Course in Database Systems project integrating ScalarDB with microservi
 - Docker
 - Spring Boot
 
-If you need more details about the prerequisites please see the [HELP.md](https://github.com/rickerp/keio-acds-project/HELP.mb)
+If you need more details about the prerequisites please see the [HELP.md](https://github.com/rickerp/keio-acds-project/blob/microservices/HELP.md)
 
 # Architecture
 Our project is composed of 2 microservices. 
@@ -28,6 +28,5 @@ Our project have multiple command to POST, GET, DELETE, PUT datas in our databas
 - [Order request](https://github.com/rickerp/keio-acds-project/blob/microservices/order-service/src/main/java/jp/keio/acds/orderservice/api/order-requests.http) 
 - [Product request](https://github.com/rickerp/keio-acds-project/blob/microservices/order-service/src/main/java/jp/keio/acds/orderservice/api/product-requests.http)
 - 
-# Contact
 
 
